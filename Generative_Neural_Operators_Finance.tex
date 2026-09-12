@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1.08in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{microtype}
+\usepackage{graphicx,booktabs,tabularx,array,float,caption}
+\usepackage{setspace}
+\usepackage[round,authoryear]{natbib}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[section]{placeins}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Generative Neural Operators in Finance},
+ pdfauthor={Miquel Noguer i Alonso},
+ pdfsubject={DOI: 10.5281/zenodo.22714857}}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\crefname{assumption}{assumption}{assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Law}{\operatorname{Law}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\Id}{\operatorname{Id}}
+\newcommand{\Ran}{\operatorname{Ran}}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\Ptwo}{\mathcal P_2}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\ip}[2]{\left\langle#1,#2\right\rangle}
+\newcommand{\push}{_{\#}}
+\newcommand{\eps}{\varepsilon}
+\setlength{\emergencystretch}{2em}
+\setstretch{1.08}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parindent}{1.25em}
+\setlength{\parskip}{0pt}
+\pagestyle{empty}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.2em,topsep=0.35em}
+\allowdisplaybreaks[1]
+\newcommand{\TV}{\operatorname{TV}}
+\newcommand{\CVaR}{\operatorname{CVaR}}
+\newcommand{\F}{\mathcal F}
+\newcommand{\Hist}{\mathsf h}
+\newcommand{\softplus}{\operatorname{softplus}}
+\title{\textbf{Generative Neural Operators in Finance}\\[0.35em]
+\large Hidden Liquidity, Valid Market Simulation,\\ and Execution Guarantees}
+\author{Miquel Noguer i Alonso\\
+\small Artificial Intelligence Finance Institute (AIFI)}
+\date{\today}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\begin{center}\small\href{https://doi.org/10.5281/zenodo.22714857}{DOI: 10.5281/zenodo.22714857}\end{center}
+\begin{abstract}
+A generative financial model must connect latent field laws, observable market events, and decisions made from simulated paths. We establish this connection through cell-integrated event intensities, a prescribed admissible transition mechanism, and posterior transport. The main comparison transfers conditional field and posterior Wasserstein errors into total variation of the entire observable event path, with a constant independent of the numerical partition. It handles discontinuous depletion and matching events and yields bounds for fill probabilities, execution costs, tail risk, and policy regret. Hidden-regime examples distinguish latent identification from predictive equivalence, while exact posterior-randomized thinning implements the asserted observable intensity, including information from quiet intervals. For a finite observable control model, a continuation-value identity weights rate error by its economic effect. Counting-process confidence sequences turn recorded events and occupation times into simultaneous rate boxes under adaptive actions and stopping. Robust dynamic programming then certifies a policy selected from those data; a residual estimate accounts for time discretization. A separate pricing construction preserves positivity and the discounted martingale property. An adapted stopping-value bound and an equal-terminal-law counterexample show why early exercise requires control of information timing. Reproducible synthetic studies train both latent-state rate emulators and event-count-based rate networks, evaluate actual policy costs independently, and report conservative certificates alongside measured errors. A Lean project checks 40 declarations, including finite history laws, reserve conservation, policy-specific regret, robust finite-horizon comparison, and residual accumulation. Continuous-time probability, transport, filtering, and stopping arguments remain explicit written proofs. The results provide a mathematically specified route from generative approximation to decision guarantees under stated observation and intervention assumptions.
+\end{abstract}
+\noindent\textbf{Keywords:} generative neural operators; limit order books; hidden liquidity; nonlinear filtering; marked point processes; optimal execution; Wasserstein distance; martingale models; formal verification.
+\clearpage
+\setcounter{tocdepth}{2}
+\tableofcontents
+\clearpage
+\input{sections/01_introduction}
+\input{sections/02_market_state}
+\input{sections/03_filtering}
+\input{sections/04_main_certificate}
+\input{sections/05_refinement}
+\input{sections/06_execution_risk}
+\input{sections/06_certified_control}
+\input{sections/07_pricing}
+\input{sections/07_stopping}
+\input{sections/08_implementation_experiments}
+\input{sections/09_formalization_discussion}
+\FloatBarrier
+\bigskip
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{plainnat}
+\begingroup
+\interlinepenalty=10000
+\setlength{\bibsep}{3pt}
+\bibliography{references}
+\endgroup
+\end{document}

@@ -1,0 +1,19 @@
+# Local dependencies and Python caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.lake/
+
+# Rebuildable LaTeX intermediates
+*.aux
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.dvi
+*.blg
+
+# Keep the supplied PDFs, figures, bibliography output, and verification logs.

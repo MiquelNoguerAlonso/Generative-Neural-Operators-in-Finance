@@ -1,0 +1,174 @@
+\begin{thebibliography}{20}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Backhoff et~al.(2022)Backhoff, Bartl, Beiglb{\"o}ck, and
+  Wiesel]{backhoff2022}
+Julio Backhoff, Daniel Bartl, Mathias Beiglb{\"o}ck, and Johannes Wiesel.
+\newblock Estimating processes in adapted {Wasserstein} distance.
+\newblock \emph{The Annals of Applied Probability}, 32\penalty0 (1):\penalty0
+  529--550, 2022.
+\newblock \doi{10.1214/21-AAP1687}.
+\newblock URL \url{https://doi.org/10.1214/21-AAP1687}.
+
+\bibitem[Backhoff-Veraguas et~al.(2020)Backhoff-Veraguas, Bartl, Beiglb{\"o}ck,
+  and Eder]{backhoff2020}
+Julio Backhoff-Veraguas, Daniel Bartl, Mathias Beiglb{\"o}ck, and Manu Eder.
+\newblock Adapted {Wasserstein} distances and stability in mathematical
+  finance.
+\newblock \emph{Finance and Stochastics}, 24\penalty0 (3):\penalty0 601--632,
+  2020.
+\newblock \doi{10.1007/s00780-020-00426-3}.
+\newblock URL \url{https://doi.org/10.1007/s00780-020-00426-3}.
+
+\bibitem[Br{\'e}maud(1981)]{bremaud1981}
+Pierre Br{\'e}maud.
+\newblock \emph{Point Processes and Queues: Martingale Dynamics}.
+\newblock Springer Series in Statistics. Springer-Verlag, New York, 1981.
+
+\bibitem[Cohen et~al.(2021)Cohen, Reisinger, and Wang]{cohen2021}
+Samuel~N. Cohen, Christoph Reisinger, and Sheng Wang.
+\newblock Arbitrage-free neural-{SDE} market models, 2021.
+\newblock URL \url{https://arxiv.org/abs/2105.11053}.
+\newblock arXiv:2105.11053.
+
+\bibitem[Coletta et~al.(2022)Coletta, Moulin, Vyetrenko, and
+  Balch]{coletta2022}
+Andrea Coletta, Aymeric Moulin, Svitlana Vyetrenko, and Tucker Balch.
+\newblock Learning to simulate realistic limit order book markets from data as
+  a world agent.
+\newblock In \emph{Proceedings of the Third ACM International Conference on AI
+  in Finance}, pages 428--436. ACM, 2022.
+\newblock \doi{10.1145/3533271.3561753}.
+\newblock URL \url{https://arxiv.org/abs/2210.09897}.
+
+\bibitem[Cont et~al.(2010)Cont, Stoikov, and Talreja]{cont2010}
+Rama Cont, Sasha Stoikov, and Rishi Talreja.
+\newblock A stochastic model for order book dynamics.
+\newblock \emph{Operations Research}, 58\penalty0 (3):\penalty0 549--563, 2010.
+\newblock \doi{10.1287/opre.1090.0780}.
+\newblock URL \url{https://pubsonline.informs.org/doi/10.1287/opre.1090.0780}.
+
+\bibitem[de~Moura and Ullrich(2021)]{demoura2021}
+Leonardo de~Moura and Sebastian Ullrich.
+\newblock The {Lean 4} theorem prover and programming language.
+\newblock In \emph{Automated Deduction---CADE 28}, volume 12699 of
+  \emph{Lecture Notes in Computer Science}, pages 625--635. Springer, 2021.
+\newblock \doi{10.1007/978-3-030-79876-5_37}.
+\newblock URL
+  \url{https://link.springer.com/chapter/10.1007/978-3-030-79876-5_37}.
+
+\bibitem[Hosseini et~al.(2025)Hosseini, Hsu, and Taghvaei]{hosseini2025}
+Bamdad Hosseini, Alexander~W. Hsu, and Amirhossein Taghvaei.
+\newblock Conditional optimal transport on function spaces.
+\newblock \emph{SIAM/ASA Journal on Uncertainty Quantification}, 13\penalty0
+  (1):\penalty0 304--338, 2025.
+\newblock \doi{10.1137/23M1618922}.
+\newblock URL \url{https://epubs.siam.org/doi/10.1137/23M1618922}.
+
+\bibitem[Howard et~al.(2020)Howard, Ramdas, McAuliffe, and Sekhon]{howard2020}
+Steven~R. Howard, Aaditya Ramdas, Jon McAuliffe, and Jasjeet Sekhon.
+\newblock Time-uniform {Chernoff} bounds via nonnegative supermartingales.
+\newblock \emph{Probability Surveys}, 17:\penalty0 257--317, 2020.
+\newblock \doi{10.1214/18-PS321}.
+\newblock URL \url{https://doi.org/10.1214/18-PS321}.
+
+\bibitem[Kallenberg(2021)]{kallenberg2021}
+Olav Kallenberg.
+\newblock \emph{Foundations of Modern Probability}, volume~99 of
+  \emph{Probability Theory and Stochastic Modelling}.
+\newblock Springer, Cham, 3 edition, 2021.
+\newblock \doi{10.1007/978-3-030-61871-1}.
+\newblock URL \url{https://link.springer.com/book/10.1007/978-3-030-61871-1}.
+
+\bibitem[Kalyanasundaram et~al.(2004)Kalyanasundaram, Chong, and
+  Shroff]{kalyanasundaram2004}
+Suresh Kalyanasundaram, Edwin K.~P. Chong, and Ness~B. Shroff.
+\newblock {Markov} decision processes with uncertain transition rates:
+  Sensitivity and max-min control.
+\newblock \emph{Asian Journal of Control}, 6\penalty0 (2):\penalty0 253--269,
+  2004.
+\newblock \doi{10.1111/j.1934-6093.2004.tb00203.x}.
+\newblock URL \url{https://doi.org/10.1111/j.1934-6093.2004.tb00203.x}.
+
+\bibitem[Kearns and Singh(2002)]{kearns2002}
+Michael Kearns and Satinder Singh.
+\newblock Near-optimal reinforcement learning in polynomial time.
+\newblock \emph{Machine Learning}, 49\penalty0 (2--3):\penalty0 209--232, 2002.
+\newblock \doi{10.1023/A:1017984413808}.
+\newblock URL \url{https://link.springer.com/article/10.1023/A:1017984413808}.
+
+\bibitem[Kerrigan et~al.(2024)Kerrigan, Migliorini, and
+  Smyth]{kerrigan2024functional}
+Gavin Kerrigan, Giosue Migliorini, and Padhraic Smyth.
+\newblock Functional flow matching.
+\newblock In \emph{Proceedings of the 27th International Conference on
+  Artificial Intelligence and Statistics}, volume 238 of \emph{Proceedings of
+  Machine Learning Research}, pages 3934--3942. PMLR, 2024.
+\newblock URL \url{https://proceedings.mlr.press/v238/kerrigan24a.html}.
+
+\bibitem[Kovachki et~al.(2023)Kovachki, Li, Liu, Azizzadenesheli, Bhattacharya,
+  Stuart, and Anandkumar]{kovachki2023}
+Nikola Kovachki, Zongyi Li, Burigede Liu, Kamyar Azizzadenesheli, Kaushik
+  Bhattacharya, Andrew Stuart, and Anima Anandkumar.
+\newblock Neural operator: Learning maps between function spaces with
+  applications to {PDEs}.
+\newblock \emph{Journal of Machine Learning Research}, 24\penalty0
+  (89):\penalty0 1--97, 2023.
+\newblock URL \url{https://jmlr.org/papers/v24/21-1524.html}.
+
+\bibitem[Nagy et~al.(2025)Nagy, Frey, Li, Sarkar, Vyetrenko, Zohren, Calinescu,
+  and Foerster]{nagy2025}
+Peer Nagy, Sascha Frey, Kang Li, Bidipta Sarkar, Svitlana Vyetrenko, Stefan
+  Zohren, Ani Calinescu, and Jakob Foerster.
+\newblock {LOB-Bench}: Benchmarking generative {AI} for finance---an
+  application to limit order book data, 2025.
+\newblock URL \url{https://arxiv.org/abs/2502.09172}.
+\newblock arXiv:2502.09172.
+
+\bibitem[Rahman et~al.(2022)Rahman, Florez, Anandkumar, Ross, and
+  Azizzadenesheli]{rahman2022}
+Md~Ashiqur Rahman, Manuel~A. Florez, Anima Anandkumar, Zachary~E. Ross, and
+  Kamyar Azizzadenesheli.
+\newblock Generative adversarial neural operators.
+\newblock \emph{Transactions on Machine Learning Research}, 2022.
+\newblock URL \url{https://openreview.net/forum?id=X1VzbBU6xZ}.
+
+\bibitem[{The mathlib Community}(2020)]{mathlib2020}
+{The mathlib Community}.
+\newblock The {Lean} mathematical library.
+\newblock In \emph{Proceedings of the 9th ACM SIGPLAN International Conference
+  on Certified Programs and Proofs}, pages 367--381. ACM, 2020.
+\newblock \doi{10.1145/3372885.3373824}.
+\newblock URL \url{https://arxiv.org/abs/1910.09336}.
+
+\bibitem[Villani(2009)]{villani2009}
+C{\'e}dric Villani.
+\newblock \emph{Optimal Transport: Old and New}, volume 338 of
+  \emph{Grundlehren der mathematischen Wissenschaften}.
+\newblock Springer, 2009.
+\newblock \doi{10.1007/978-3-540-71050-9}.
+\newblock URL \url{https://link.springer.com/book/10.1007/978-3-540-71050-9}.
+
+\bibitem[Vuleti{\'c} and Cont(2024)]{vuletic2024}
+Milena Vuleti{\'c} and Rama Cont.
+\newblock {VolGAN}: A generative model for arbitrage-free implied volatility
+  surfaces.
+\newblock \emph{Applied Mathematical Finance}, 31\penalty0 (4):\penalty0
+  203--238, 2024.
+\newblock \doi{10.1080/1350486X.2025.2471317}.
+\newblock URL
+  \url{https://www.tandfonline.com/doi/full/10.1080/1350486X.2025.2471317}.
+\newblock Volume year 2024; published online 6 March 2025.
+
+\bibitem[Zhang(2025)]{zhang2025}
+Jian'an Zhang.
+\newblock A risk-neutral neural operator for arbitrage-free {SPX--VIX} term
+  structures, 2025.
+\newblock URL \url{https://arxiv.org/abs/2511.06451}.
+\newblock arXiv:2511.06451.
+
+\end{thebibliography}
