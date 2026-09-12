@@ -1,0 +1,222 @@
+{
+  "kind": "Synthetic illustrations; no trained neural models or real market data",
+  "filter": {
+    "seed": 20260911,
+    "true_regime": "fast",
+    "events": [
+      0.4187161827720769,
+      0.630574020797238,
+      0.9884343321860976,
+      1.4649321215935518,
+      2.152601822018112,
+      2.391438377998968,
+      2.6820049677847475,
+      2.8016108614783874,
+      2.8860911658049777,
+      2.9095996081600095,
+      3.137341487167239,
+      3.7655969013027892,
+      3.9306882595095924,
+      3.9725503712871015
+    ],
+    "final_posterior": 0.9993940585421642,
+    "final_predictive_probability": 0.5661981014035776,
+    "snapshot_predictive_probability": 0.29275901825472245
+  },
+  "queue": {
+    "horizon": 2.0,
+    "initial_queue": 4,
+    "expected_death_count": 3.5212578020956524,
+    "true_depletion_probability": 0.16938295236472917,
+    "rows": [
+      {
+        "theta": 0.001,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.1698132771748604,
+        "depletion_error": 0.0004303248101312218,
+        "terminal_tv": 0.0006125992035542274,
+        "mean_path_tv_bound": 0.0035212578020956523,
+        "uniform_path_tv_bound": 0.004987520807317687,
+        "path_kl": 1.7594560280580503e-06,
+        "kl_path_tv_bound": 0.0009379381717517553,
+        "cvar99_bound_over_B": 0.09379381717517553
+      },
+      {
+        "theta": 0.002,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.1702440146414339,
+        "depletion_error": 0.0008610622767047382,
+        "terminal_tv": 0.0012248955134614055,
+        "mean_path_tv_bound": 0.007042515604191305,
+        "uniform_path_tv_bound": 0.009950166250831947,
+        "path_kl": 7.033139645917842e-06,
+        "kl_path_tv_bound": 0.0018752519358632644,
+        "cvar99_bound_over_B": 0.18752519358632644
+      },
+      {
+        "theta": 0.01,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.1737046490809498,
+        "depletion_error": 0.004321696716220624,
+        "terminal_tv": 0.006112247425404012,
+        "mean_path_tv_bound": 0.03521257802095652,
+        "uniform_path_tv_bound": 0.04877057549928599,
+        "path_kl": 0.00017489787080532182,
+        "kl_path_tv_bound": 0.009351413551044617,
+        "cvar99_bound_over_B": 0.9351413551044617
+      },
+      {
+        "theta": 0.025,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.18026254372180064,
+        "depletion_error": 0.010879591357071478,
+        "terminal_tv": 0.015221949013555548,
+        "mean_path_tv_bound": 0.08803144505239131,
+        "uniform_path_tv_bound": 0.1175030974154046,
+        "path_kl": 0.0010823903144203297,
+        "kl_path_tv_bound": 0.023263601552858598,
+        "cvar99_bound_over_B": 1.0
+      },
+      {
+        "theta": 0.05,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.1913847702063494,
+        "depletion_error": 0.022001817841620225,
+        "terminal_tv": 0.03024089935724541,
+        "mean_path_tv_bound": 0.17606289010478263,
+        "uniform_path_tv_bound": 0.22119921692859512,
+        "path_kl": 0.0042601438576424285,
+        "kl_path_tv_bound": 0.046152702291645004,
+        "cvar99_bound_over_B": 1.0
+      },
+      {
+        "theta": 0.1,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.2142921769557673,
+        "depletion_error": 0.04490922459103813,
+        "terminal_tv": 0.059618694982057914,
+        "mean_path_tv_bound": 0.35212578020956525,
+        "uniform_path_tv_bound": 0.3934693402873666,
+        "path_kl": 0.016514065954446846,
+        "kl_path_tv_bound": 0.09086821764084196,
+        "cvar99_bound_over_B": 1.0
+      },
+      {
+        "theta": 0.2,
+        "true_depletion": 0.16938295236472917,
+        "model_depletion": 0.2622953704488842,
+        "depletion_error": 0.09291241808415501,
+        "terminal_tv": 0.11544430782836121,
+        "mean_path_tv_bound": 0.7042515604191305,
+        "uniform_path_tv_bound": 0.6321205588285577,
+        "path_kl": 0.06225035606819212,
+        "kl_path_tv_bound": 0.17642329220966277,
+        "cvar99_bound_over_B": 1.0
+      }
+    ],
+    "resolution": {
+      "m": [
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "beta": 0.04,
+      "eta": 0.06,
+      "K": 0.4,
+      "kappa": [
+        0.6335882470881437,
+        0.4782527924799742,
+        0.354195721833612,
+        0.26234735633726797,
+        0.19789005479560404,
+        0.1548438053222187,
+        0.12765285864220785,
+        0.11149894532393921
+      ],
+      "rate_bound": [
+        0.25343529883525745,
+        0.1913011169919897,
+        0.1416782887334448,
+        0.1049389425349072,
+        0.07915602191824161,
+        0.06193752212888748,
+        0.051061143456883146,
+        0.044599578129575684
+      ],
+      "limiting_kappa": 0.09248598351972465
+    }
+  },
+  "execution": {
+    "prices": [
+      100.0,
+      100.01,
+      100.03,
+      100.06
+    ],
+    "volume_a": [
+      2.0,
+      3.0,
+      2.0,
+      3.0
+    ],
+    "volume_b": [
+      1.0,
+      2.0,
+      4.0,
+      3.0
+    ],
+    "mass": 10.0,
+    "transport_cost_bound": 0.04999999999999716,
+    "terminal_cost_gap": 0.04999999999999716
+  },
+  "pricing": {
+    "spot": 100.0,
+    "volatilities": [
+      0.15,
+      0.35
+    ],
+    "weights": [
+      0.5,
+      0.5
+    ],
+    "maturities": [
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "atm_calls": [
+      4.981978720962513,
+      7.038808593420946,
+      9.935282726056837,
+      13.996948222005233
+    ],
+    "uncorrected_mean_at_2": 107.65370771192283,
+    "corrected_mean_at_2": 100.0
+  },
+  "reserve_states_checked": 784,
+  "checks": {
+    "filter_logodds_vs_bayes": 1.1102230246251565e-16,
+    "queue_row_sums": 2.220446049250313e-16,
+    "occupancy_total_time": 0.0,
+    "queue_bounds_pass": true,
+    "execution_quantile_bound": true,
+    "execution_bound_attained": 0.0,
+    "call_strike_monotonicity": true,
+    "call_strike_convexity": true,
+    "call_calendar_monotonicity": true,
+    "reserve_conservation_max_error": 0,
+    "reserve_nonnegative": true
+  },
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "matplotlib": "3.10.8"
+  }
+}

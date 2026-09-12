@@ -1,0 +1,241 @@
+{
+  "pages": 42,
+  "pdf_sha256": "0a15d0f064a0eb0bf89f1304955e7e028c641f663047173cda554cb79bd988aa",
+  "latex_issues": [],
+  "rendered_pages": 42,
+  "counts": {
+    "theorem": 13,
+    "proposition": 11,
+    "corollary": 1,
+    "lemma": 2,
+    "proof": 27,
+    "figure": 6,
+    "table": 4
+  },
+  "unresolved_reference_markers": 0,
+  "control_characters": false,
+  "bibliography_entries": 20,
+  "lean": 40,
+  "visual_review": "PASS: every final page rendered and visually inspected; detailed inspection of new theorem, confidence, pricing and experiment pages; no clipping or overlap observed",
+  "doi": "10.5281/zenodo.22714857",
+  "doi_validation": "PASS: visible on opening page, correct clickable DOI URL, and PDF subject metadata",
+  "academic_format": "PASS: established 11-point article, 1.08-inch margins and line spacing, AIFI author block, plainnat, actual today command, linked table of contents, no running headers, footers, or printed page numbers",
+  "table_of_contents": {
+    "physical_pages": [
+      2,
+      3
+    ],
+    "valid_internal_links": 52,
+    "destinations": [
+      {
+        "destination": "section.1",
+        "page": 4
+      },
+      {
+        "destination": "subsection.1.1",
+        "page": 5
+      },
+      {
+        "destination": "subsection.1.2",
+        "page": 5
+      },
+      {
+        "destination": "section.2",
+        "page": 6
+      },
+      {
+        "destination": "subsection.2.1",
+        "page": 6
+      },
+      {
+        "destination": "subsection.2.2",
+        "page": 7
+      },
+      {
+        "destination": "subsection.2.3",
+        "page": 7
+      },
+      {
+        "destination": "section.3",
+        "page": 8
+      },
+      {
+        "destination": "subsection.3.1",
+        "page": 8
+      },
+      {
+        "destination": "subsection.3.2",
+        "page": 9
+      },
+      {
+        "destination": "section.4",
+        "page": 9
+      },
+      {
+        "destination": "subsection.4.1",
+        "page": 12
+      },
+      {
+        "destination": "subsection.4.2",
+        "page": 13
+      },
+      {
+        "destination": "subsection.4.3",
+        "page": 13
+      },
+      {
+        "destination": "subsection.4.4",
+        "page": 14
+      },
+      {
+        "destination": "subsection.4.5",
+        "page": 14
+      },
+      {
+        "destination": "section.5",
+        "page": 14
+      },
+      {
+        "destination": "subsection.5.1",
+        "page": 16
+      },
+      {
+        "destination": "section.6",
+        "page": 17
+      },
+      {
+        "destination": "subsection.6.1",
+        "page": 17
+      },
+      {
+        "destination": "subsection.6.2",
+        "page": 18
+      },
+      {
+        "destination": "subsection.6.3",
+        "page": 19
+      },
+      {
+        "destination": "subsection.6.4",
+        "page": 20
+      },
+      {
+        "destination": "section.7",
+        "page": 20
+      },
+      {
+        "destination": "subsection.7.1",
+        "page": 20
+      },
+      {
+        "destination": "subsection.7.2",
+        "page": 21
+      },
+      {
+        "destination": "subsection.7.3",
+        "page": 22
+      },
+      {
+        "destination": "subsection.7.4",
+        "page": 23
+      },
+      {
+        "destination": "section.8",
+        "page": 24
+      },
+      {
+        "destination": "subsection.8.1",
+        "page": 24
+      },
+      {
+        "destination": "subsection.8.2",
+        "page": 25
+      },
+      {
+        "destination": "subsection.8.3",
+        "page": 25
+      },
+      {
+        "destination": "subsection.8.4",
+        "page": 26
+      },
+      {
+        "destination": "section.9",
+        "page": 27
+      },
+      {
+        "destination": "subsection.9.1",
+        "page": 27
+      },
+      {
+        "destination": "subsection.9.2",
+        "page": 28
+      },
+      {
+        "destination": "subsection.9.3",
+        "page": 28
+      },
+      {
+        "destination": "subsection.9.4",
+        "page": 30
+      },
+      {
+        "destination": "subsection.9.5",
+        "page": 30
+      },
+      {
+        "destination": "subsection.9.6",
+        "page": 31
+      },
+      {
+        "destination": "subsection.9.7",
+        "page": 34
+      },
+      {
+        "destination": "subsection.9.8",
+        "page": 34
+      },
+      {
+        "destination": "subsection.9.9",
+        "page": 36
+      },
+      {
+        "destination": "subsection.9.10",
+        "page": 37
+      },
+      {
+        "destination": "section.10",
+        "page": 37
+      },
+      {
+        "destination": "subsection.10.1",
+        "page": 37
+      },
+      {
+        "destination": "subsection.10.2",
+        "page": 38
+      },
+      {
+        "destination": "subsection.10.3",
+        "page": 38
+      },
+      {
+        "destination": "subsection.10.4",
+        "page": 39
+      },
+      {
+        "destination": "subsection.10.5",
+        "page": 39
+      },
+      {
+        "destination": "section.11",
+        "page": 40
+      },
+      {
+        "destination": "section*.15",
+        "page": 41
+      }
+    ]
+  },
+  "formalization_scope": "Selected finite, probabilistic, and algebraic results; analytic results outside the mechanized scope are identified in the manuscript and lean/COVERAGE.md."
+}
