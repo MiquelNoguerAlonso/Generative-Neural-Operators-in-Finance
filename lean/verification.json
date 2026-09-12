@@ -1,0 +1,384 @@
+{
+  "status": "PASS",
+  "lean_version": "Lean (version 4.19.0, x86_64-unknown-linux-gnu, commit 6caaee842e94, Release)",
+  "theorem_declarations_checked": 40,
+  "custom_axioms": [],
+  "admitted_proofs": [],
+  "declarations": [
+    {
+      "name": "FinGNO.cell_integration_contraction",
+      "source": "FinGNO/CellRates.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.weighted_l1_square_bound",
+      "source": "FinGNO/CellRates.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.weighted_l1_l2_bound",
+      "source": "FinGNO/CellRates.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.rate_box_endpoints",
+      "source": "FinGNO/CertifiedControl.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.pessimistic_policy_regret",
+      "source": "FinGNO/CertifiedControl.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.expectation_monotone",
+      "source": "FinGNO/CertifiedControl.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.expectation_sup_error",
+      "source": "FinGNO/CertifiedControl.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.finite_robust_sandwich",
+      "source": "FinGNO/CertifiedControl.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.finite_horizon_residual",
+      "source": "FinGNO/CertifiedControl.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.prefix_cost_error",
+      "source": "FinGNO/Execution.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.policy_regret",
+      "source": "FinGNO/Execution.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.cvar_objective_error",
+      "source": "FinGNO/Execution.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.tv_nonneg",
+      "source": "FinGNO/FiniteLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.tv_symm",
+      "source": "FinGNO/FiniteLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.tv_triangle",
+      "source": "FinGNO/FiniteLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.bounded_expectation_error",
+      "source": "FinGNO/FiniteLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.event_probability_error",
+      "source": "FinGNO/FiniteLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.joint_tv_same_base",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.joint_tv_same_kernel",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.joint_tv_bound",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.joint_tv_uniform",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.history_tv_bound",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.posterior_acceptance_probability",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.posterior_thinning_rate",
+      "source": "FinGNO/PathLaws.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.positive_expectation",
+      "source": "FinGNO/Pricing.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.normalized_return_positive",
+      "source": "FinGNO/Pricing.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.normalized_return_mean_one",
+      "source": "FinGNO/Pricing.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.normalized_step_mean",
+      "source": "FinGNO/Pricing.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.radius_nonneg",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.radius_sq_succ",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.radius_monotone",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.square_step_monotone",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.error_le_radius",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.radius_step_bound",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.radius_sq_le_linearBound",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.context_independent_exact",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.exponential_certificate",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.add_tail_certificate",
+      "source": "FinGNO/Refinement.lean",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.accepted_event_conserves",
+      "source": "FinGNO/Reserve.lean",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "FinGNO.accepted_replay_conserves",
+      "source": "FinGNO/Reserve.lean",
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "sha256": {
+    "Audit.lean": "6f7745b15260a7c4ff482cc4fe84e19d1d4ba6ffc752105a8a72f335a182076e",
+    "FinGNO/CellRates.lean": "1f66f89373499d71f048a4c766d56532dd6e250def7ed82e24d72b024b648f44",
+    "FinGNO/CertifiedControl.lean": "9d931f2f0554500b2e7bae9895e127d8f93663f81669a35aecc90828c36dd0be",
+    "FinGNO/Execution.lean": "7874f2656ec7cbb68a65fae6f3c305153f56551fd161db8b2f5387ad7f916456",
+    "FinGNO/FiniteLaws.lean": "8badcf14da4c09bcc30bbf1cfb2a0cb043ceca3f9fdcada696525cae87419ae3",
+    "FinGNO/PathLaws.lean": "fb3db0b47204f4ea720bcb4a9eb9df09567edbb382704159327de8b5d603282b",
+    "FinGNO/Pricing.lean": "ce833a135ec98053bb95178cf30be792cc918456efaa2b63977d561598b5cbf4",
+    "FinGNO/Refinement.lean": "a0247fef28699a2544886f4835bac1e0b656f67183d1b4b8c3884f7ae8b50163",
+    "FinGNO/Reserve.lean": "b4d46c8091a47ffc7be49564d4df029272e67fa16bbafc2d215d26fc7aeb26c5",
+    "FinGNO.lean": "3fecb514da6501e5450e989990d87418b346b0b32aa7c27b1013d7b584e58000",
+    "lake-manifest.json": "86a1d3a8f8ad2e5067a2196e04775b88812364cd0c6283f0851e0cb8fa18dadd",
+    "lakefile.toml": "4784572a7e00fd0c701afad99fc70712f1076e1c5c634f654b494cdeeafc2ef6",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "scope": "See COVERAGE.md; no claim that every manuscript theorem is mechanized.",
+  "runtime": "See README.md for any platform-specific executable discovery adjustment."
+}
