@@ -1,0 +1,44 @@
+{
+  "numerical_reports_exactly_reproduced": [
+    "learned_reserve.json",
+    "metrics.json",
+    "certified_control.json"
+  ],
+  "assets_byte_identical": 8,
+  "programs": [
+    "reproduce.py",
+    "learned_reserve.py",
+    "certified_control.py"
+  ],
+  "lean": 40,
+  "status": "PASS",
+  "date": "2026-09-12",
+  "scope": "Executed reruns in the supplied CPU environment; no promise of bitwise identity on different dependency versions or hardware.",
+  "lean_status": "PASS",
+  "lean_verified_source_hashes_match": true,
+  "lean_custom_axioms": [],
+  "lean_admitted_proofs": [],
+  "numerical_report_sha256": {
+    "learned_reserve.json": "8ada68c7740737a19237fffcad674b0854a0ab28acceefc26f1ada05c8e7be17",
+    "metrics.json": "33c1017a0d54a900afdaed16de87cb5bc73322616cbe79863a0545e509909bf0",
+    "certified_control.json": "065dc0e222714a6243d395ecd8f2f85052979c405f141573095934a2f7c96893"
+  },
+  "program_sha256": {
+    "reproduce.py": "63f685eb5805822280906be0ff70f024d4ddbfe7f83e56699b71190c1d7bc2b9",
+    "learned_reserve.py": "103abb28bc0b0171caf30f91a9957aae9fac0741654aab46ddd47eb2cb79e81e",
+    "certified_control.py": "a1300761ded7c67a5739e09382ba189252348c654e9f40ef068258c05797c004"
+  },
+  "asset_sha256": {
+    "figures/certified_control.png": "74c84a63433af332e295a64812ecb19662f5eee86cdf4f9d232d3a666bde743c",
+    "figures/event_error_certificate.png": "a0568313a8e03ed5973ba9e96fce1d9e78eec831b3f76ecbf1e80c038d6116e2",
+    "figures/execution_geometry.png": "c19a0c47a9be2babbe16c826bacc8227a91231aa2d4f736c71808b4c0c85aad2",
+    "figures/hidden_liquidity_filter.png": "92bbe0a983f8ccc1da9f96c87842f122ea512cc1d9babc399d401946eecdfb34",
+    "figures/learned_reserve.png": "531ed0b0c23f7772548351f6db49631ba4d2eada396fe1e1f5837a8aa4c6ad60",
+    "figures/martingale_pricing.png": "64b9bf14271610ad187e6335b862ffefb34c30a39a8c94ff5805c0e264f9b612",
+    "models/count_trained_rates.json": "6e4c853ea4baf5c0b8bc14c13515274fe901d0daa17b0fe6217fafbeef9d9b13",
+    "models/reserve_rate_network.json": "545b6430d6ce3f16fe74ab1a44eb072d7c15d4fe09b84fcd7c6a7f39e645a3fe"
+  },
+  "pdf_pages": 42,
+  "pdf_sha256": "0a15d0f064a0eb0bf89f1304955e7e028c641f663047173cda554cb79bd988aa",
+  "latex_issues": []
+}
