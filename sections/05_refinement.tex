@@ -1,0 +1,110 @@
+\section{A posterior certificate from conditional refinement}\label{sec:refine}
+The previous theorem separates posterior error from intensity fitting. We now derive a posterior error bound directly from conditional detail laws, orthogonality, and Wasserstein coupling. The proof below is self-contained; its application along financial histories additionally requires a predictable family of posteriors and error bounds.
+
+Fix a time and observed history. Let $P_j$ be nested finite-rank orthogonal projections on $\mathsf H$, with $P_{-1}=0$ and $P_j\to I$ strongly. Set
+$E_j=\operatorname{Ran}(P_j-P_{j-1})$ and let $\mu_j=(P_j)_\#\pi$.
+Disintegrate the target posterior into conditional detail laws
+\[
+ K_j(x,\cdot)=\Law((P_j-P_{j-1})Z\mid P_{j-1}Z=x).
+\]
+The learned generator appends a detail drawn from $\widehat K_j(\widehat x,\cdot)$ to its previously generated context. Its level-$j$ law is $\widehat\mu_j$ and is supported on $\operatorname{Ran}P_j$. Use Borel versions of the detail kernels with finite second moments on the contexts involved in the comparison.
+
+\begin{assumption}[Conditional errors and learned sensitivity]\label{ass:refine}
+For every retained level, let
+\begin{align}
+ \eps_j^2&=\int W_2^2(K_j(x),\widehat K_j(x))\,\mu_{j-1}(\dd x)<\infty,
+ \label{eq:eps}\\
+ W_2(\widehat K_j(x),\widehat K_j(y))&\le L_j\|x-y\|,
+ \label{eq:detail-lip}
+\end{align}
+where $L_j\ge0$ applies to every context needed in the comparison. Set $L_0=0$ and $\mu_{-1}=\delta_0$. These quantities concern conditional population laws, not raw empirical training loss.
+\end{assumption}
+
+\begin{theorem}[Orthogonal posterior certificate]\label{thm:posterior-certificate}
+Under \Cref{ass:refine}, define
+\begin{equation}\label{eq:recurrence}
+ d_{-1}=0,\qquad d_j^2=d_{j-1}^2+(\eps_j+L_jd_{j-1})^2.
+\end{equation}
+Then
+\begin{equation}\label{eq:posterior-certificate}
+ W_2^2(\pi,\widehat\mu_m)
+ =\tau_m^2+W_2^2(\mu_m,\widehat\mu_m)
+ \le\tau_m^2+d_m^2,\qquad
+ \tau_m^2=\E_\pi\|(I-P_m)Z\|^2.
+\end{equation}
+Furthermore,
+\begin{equation}\label{eq:exp-certificate}
+ d_m^2\le
+ 2\sum_{j=0}^m\eps_j^2\prod_{k=j+1}^m(1+2L_k^2)
+ \le2\exp\left(2\sum_{k=1}^mL_k^2\right)\sum_{j=0}^m\eps_j^2.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Couple the previous target and generated contexts $(X,\widehat X)$ with
+$D=(\E\|X-\widehat X\|^2)^{1/2}$. Conditional on $(X,\widehat X)=(x,y)$, choose optimal couplings between $K_j(x)$ and $\widehat K_j(x)$, and between $\widehat K_j(x)$ and $\widehat K_j(y)$. Glue them along their common marginal to obtain details $(B,\widetilde B,\widehat B)$. Borel selection of optimal plans for the continuous squared-distance cost is supplied by \citet[Corollary~5.22]{villani2009}; parameterized disintegration then gives a measurable gluing kernel. This justifies successive sampling, including when the observed history is an external parameter.
+
+The first coupling has integrated squared cost $\eps_j^2$, since $X$ has the target context law. The second has cost at most $L_j^2D^2$ by \eqref{eq:detail-lip}. Minkowski's inequality therefore yields
+\[
+ (\E\|B-\widehat B\|^2)^{1/2}\le\eps_j+L_jD.
+\]
+Old-context differences lie in $\operatorname{Ran}P_{j-1}$ and new-detail differences in the orthogonal space $E_j$. Consequently,
+\[
+ \E\|(X+B)-(\widehat X+\widehat B)\|^2
+ =D^2+\E\|B-\widehat B\|^2
+ \le D^2+(\eps_j+L_jD)^2.
+\]
+Start from the common zero context. The right-hand side is increasing in $D\ge0$, so induction gives a coupling at every level with cost at most $d_j^2$, and hence $W_2(\mu_j,\widehat\mu_j)\le d_j$. The same finite-cost coupling proves that each generated law has finite second moment.
+
+For any coupling $(Z,Y)$ of $\pi$ and $\widehat\mu_m$, orthogonality gives
+\[
+ \|Z-Y\|^2=\|(I-P_m)Z\|^2+\|P_mZ-Y\|^2.
+\]
+Taking infima proves the lower bound in the equality in \eqref{eq:posterior-certificate}. Conversely, lift an optimal coupling of $\mu_m$ and $\widehat\mu_m$ by the conditional law of $Z$ given $P_mZ$. Its cost is precisely the sum of the tail energy and the projected optimal cost. This proves the equality and its asserted upper bound.
+
+Finally, $(a+b)^2\le2a^2+2b^2$ implies
+$d_j^2\le(1+2L_j^2)d_{j-1}^2+2\eps_j^2$.
+Iteration, followed by $1+u\le e^u$ for $u\ge0$, proves \eqref{eq:exp-certificate}.
+\end{proof}
+
+The same construction makes samples projectively consistent along the latent hierarchy: appending an orthogonal detail does not change previously generated coordinates. If $\sum_jL_j^2$ and $\sum_j\eps_j^2$ are finite, the learned partial fields have uniformly bounded second moments. Their orthogonal energies form an increasing sequence with bounded expectation, so the detail series converges almost surely and in mean square. This provides a genuine Hilbert-valued learned posterior. It does not automatically make physical market dynamics autonomous at each latent resolution.
+
+\begin{assumption}[Predictable posterior family]\label{ass:predictable-posterior}
+The projections are deterministic. The kernels $\pi$, $K_j$, and $\widehat K_j$ are jointly measurable in time, observed past history, and their detail/context variables; composition with $(t,\Hist_{t-})$ gives predictable probability kernels. Choose nonnegative predictable versions of $\eps_{t,j}$, $L_{t,j}$, and $\tau_{t,m}$ satisfying \Cref{ass:refine} on the required histories. Their finite recursion $d_{t,m}$ is then predictable. The field error $r_t$, latent sensitivity $K_t$, and any implementation error are also predictable, and the displayed time integrals are integrable under the policy being compared. No independent arbitrary choice of versions at uncountably many times is being made.
+\end{assumption}
+
+\begin{corollary}[Resolution and execution-path accuracy]\label{cor:combined}
+Under \Cref{ass:predictable-posterior}, apply \Cref{thm:posterior-certificate} at each true history and use $\widehat\pi_{t-}=\widehat\mu_{t,m}$. Under the hypotheses of \Cref{thm:main},
+\begin{equation}\label{eq:combined}
+ \TV(\mathbb P^a_{[0,T]},\widehat{\mathbb P}^a_{[0,T]})
+ \le\min\left\{1,\sqrt M\,\E^a\int_0^T
+ \left[r_t+K_t\sqrt{\tau_{t,m}^2+d_{t,m}^2}\right]\dd t\right\}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+Use \eqref{eq:posterior-certificate} for $\kappa_t$ in \eqref{eq:main}.
+\end{proof}
+
+Increasing resolution reduces $\tau_{t,m}$ but can increase the accumulated fitting error $d_{t,m}$ and the learned sensitivity. Resolution alone cannot remove a systematic conditional modeling bias.
+
+\subsection{Connecting the certificate to conditional flow matching}
+One way to parameterize $\widehat K_j$ is a conditional flow in the detail space. Given context $x$, let $B_j^x\sim K_j(x)$ and an independent reference $Z_j$. For artificial time $s\in[0,1]$, define
+\[
+ I_s^x=(1-s)Z_j+sB_j^x,\qquad
+ w_s^*(y;x)=\E[B_j^x-Z_j\mid I_s^x=y].
+\]
+Assume both the target interpolation and the learned ODE have well-posed flows, the exact flow has law $\Law(I_s^x)$, and the learned velocity is one-sided Lipschitz in its state with integrable constant $\ell_j(s)$. These analytic assumptions are not implied by merely writing a conditional expectation.
+
+Let $\mathcal E_j$ be the population excess flow-matching loss, integrated over target contexts and artificial time. Synchronous ODE comparison and Cauchy--Schwarz give
+\begin{equation}\label{eq:fm}
+ \eps_j^2\le A_j\mathcal E_j,\qquad
+ A_j=\int_0^1\exp\left(2\int_s^1\ell_j(u)\dd u\right)\dd s.
+\end{equation}
+To see this, compare exact and learned trajectories from the same reference sample. The endpoint discrepancy is at most
+$\int_0^1e^{\int_s^1\ell_j}\|\widehat w_s(I_s^x;x)-w_s^*(I_s^x;x)\|\dd s$.
+Square, take expectations, and use the regression orthogonality identifying excess loss with the squared velocity error.
+
+If the learned velocity is also context-Lipschitz with constant $b_j(s)$, comparing two learned flows gives the sufficient bound
+\[
+ L_j\le\int_0^1\exp\left(\int_s^1\ell_j(u)\dd u\right)b_j(s)\dd s.
+\]
+A numerical solver needs its own endpoint-error and context-stability estimates. Equation \eqref{eq:fm} concerns the continuous learned flow. Artificial generation time $s$ is distinct from financial time $t$.

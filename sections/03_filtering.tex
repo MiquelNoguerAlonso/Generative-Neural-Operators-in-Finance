@@ -1,0 +1,74 @@
+\section{Hidden liquidity as a conditional law}\label{sec:filter}
+Let $\mathsf H$ be a separable real Hilbert space, and let $Z_t$ be the latent state required by the conditional rate specification. History-dependent latent dynamics can be included by enlarging the state. Assume the relevant conditional laws have finite second moments, and write
+\begin{equation}
+ \pi_{t-}=\Law(Z_{t-}\mid\F^O_{t-}),\qquad
+ \widehat\pi_{t-}=\Law(G_\theta(\Hist_{t-},\xi)),
+\end{equation}
+where $\xi$ is fresh generative noise. The second expression defines a history-dependent approximate belief. Unless its update equations have been derived from a complete latent model, it should not automatically be called that model's exact Bayesian posterior.
+
+\begin{proposition}[Observable event intensity]\label{prop:filter-rate}
+Suppose $N_e$ has full-information predictable intensity
+$\lambda_e(t,\Hist_{t-},Z_{t-},a_t)$, the action $a_t$ is predictable from observed history, and the rates are integrable on finite horizons. Its intensity in the observed filtration is
+\begin{equation}\label{eq:observable-rate}
+ \bar\lambda_e(t,\Hist_{t-},a_t)
+ =\int \lambda_e(t,\Hist_{t-},z,a_t)\,\pi_{t-}(\dd z).
+\end{equation}
+\end{proposition}
+\begin{proof}
+For every bounded observed-predictable test process $\varphi_t$,
+\[
+ \E\int_0^T\varphi_t\dd N_e(t)
+ =\E\int_0^T\varphi_t\lambda_e(t,\Hist_{t-},Z_{t-},a_t)\dd t.
+\]
+Conditional expectation given $\F^O_{t-}$ turns the right side into
+$\E\int_0^T\varphi_t\bar\lambda_e(t,\Hist_{t-},a_t)\dd t$.
+This is the compensator characterization of the observed intensity.
+\end{proof}
+
+Equation \eqref{eq:observable-rate} identifies the relevant predictive object. It generally depends on a distribution of latent states. Evaluating the rate at a posterior mean is a different operation:
+$\int\lambda_e(z)\pi(\dd z)$ need not equal $\lambda_e(\int z\pi(\dd z))$.
+If $\lambda_e$ is $L$-Lipschitz, the discrepancy is at most
+$L\E_\pi\|Z-\E_\pi Z\|$. A posterior mean is adequate only with additional linearity, concentration, or an explicit error bound.
+
+\subsection{A quantitative obstruction to snapshot closure}
+\begin{theorem}[Snapshot prediction can have irreducible error]\label{thm:snapshot}
+Consider two admissible latent specifications with the same current displayed state. Suppose their future observable counting processes over a horizon $T$ are Poisson with distinct constant rates $\lambda_0,\lambda_1$. Any single snapshot-conditioned predictive path law $Q$ satisfies
+\begin{equation}\label{eq:snapshot-lower}
+ \max\{\TV(P_0,Q),\TV(P_1,Q)\}
+ \ge \frac12\left|e^{-\lambda_0T}-e^{-\lambda_1T}\right|.
+\end{equation}
+Here $P_i$ is the observable path law in latent specification $i$.
+\end{theorem}
+\begin{proof}
+The event of no arrival has probabilities $e^{-\lambda_iT}$, hence
+$\TV(P_0,P_1)\ge|e^{-\lambda_0T}-e^{-\lambda_1T}|$.
+The triangle inequality implies
+$\TV(P_0,P_1)\le\TV(P_0,Q)+\TV(Q,P_1)$, proving the claim.
+\end{proof}
+
+The example uses a liquidity \emph{regime}, not a reserve that remains constant despite executions. If the hidden variable is actual inventory, it must evolve according to an accounting rule such as \eqref{eq:reserve-update}. The same obstruction occurs whenever two hidden states with identical displayed observations yield different future event laws.
+
+\begin{proposition}[Exact static-regime filter]\label{prop:poisson-filter}
+Let $H\in\{0,1\}$ be a time-constant latent regime with prior
+$\mathbb P(H=1)=p\in(0,1)$. Conditional on $H=i$, observed marked counts have constant positive intensities $\lambda_i(e)$. Write
+$\Lambda_i=\sum_e\lambda_i(e)$. Then
+\begin{equation}\label{eq:logodds}
+ \log\frac{p_t}{1-p_t}
+ =\log\frac p{1-p}
+ +\sum_{k:t_k\le t}\log\frac{\lambda_1(e_k)}{\lambda_0(e_k)}
+ -t(\Lambda_1-\Lambda_0).
+\end{equation}
+\end{proposition}
+\begin{proof}
+The marked point-process likelihood under regime $i$ is proportional to
+$e^{-t\Lambda_i}\prod_{k:t_k\le t}\lambda_i(e_k)$.
+The likelihood ratio times the prior odds gives the posterior odds. Taking logarithms proves \eqref{eq:logodds}.
+\end{proof}
+
+The survival term is essential: observing no arrival is information about intensity. A method that updates only at trades but ignores elapsed time does not implement this filter.
+
+\subsection{Identifiability, prediction, and interventions}
+Latent identification is stronger than predictive sufficiency. If two latent descriptions induce the same observable path law, observable data cannot distinguish them, however accurate the simulator becomes. An operational definition of hidden liquidity should therefore specify whether its target is physical undisplayed quantity, a posterior for that quantity under a structural model, or a latent variable that predicts replenishment and price response.
+
+There is a second identification issue for trading policies. Suppose a passive dataset contains only action $a=0$. Two models can agree on
+$\lambda(t,\Hist,z,0)$ for every observed history and assign different rates to $a=1$. They have identical passive likelihoods and different counterfactual execution laws. No bound for a newly optimized policy follows from passive fit alone. The uniform-policy result below assumes accurate action-dependent rates on the histories and actions generated by the policy class. Randomized interventions, a valid structural model, or other justified identification conditions must provide that information.

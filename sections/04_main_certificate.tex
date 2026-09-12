@@ -1,0 +1,131 @@
+\section{From field error to observable path error}\label{sec:main}
+We use the convention
+\[
+ \TV(P,Q)=\sup_{B}|P(B)-Q(B)|\in[0,1].
+\]
+For finite sample spaces it equals $\frac12\sum_\omega|P(\omega)-Q(\omega)|$.
+The factor $\frac12$ is essential for the execution constants below.
+
+\begin{assumption}[A common admissible simulator]\label{ass:simulator}
+The true and learned models have the same initial observed state, the same finite mark set, and the same deterministic transition rule $\Delta$. A common predictable policy $a_t=a(t,\Hist_{t-})$ supplies actions. On the finite horizon $[0,T]$, both observable intensity functionals are measurable and bounded by a finite deterministic envelope. Their point-process constructions are unique in law. The learned functional is defined on every true history needed in the comparison, including histories absent from training.
+\end{assumption}
+
+A bounded envelope is a convenient sufficient condition for nonexplosion and common thinning. The comparison extends to nonexplosive locally bounded models by stopping and integrable limits, but the bounded version is all that is required here. A randomized policy is covered by adding a shared random seed to the initial observed information.
+
+\begin{lemma}[Cell integration controls event-rate error]\label{lem:cells}
+For $f,g\in L^2(A,\nu)$, disjoint measurable cells $(B_e)$, and common masks $m_e\in[0,1]$,
+\begin{equation}\label{eq:cell-contraction}
+ \sum_e\left|m_e\int_{B_e}(f-g)\dd\nu\right|
+ \le\|f-g\|_{L^1(\nu)}
+ \le\sqrt M\,\|f-g\|_{L^2(\nu)}.
+\end{equation}
+The constant does not depend on the number of cells.
+\end{lemma}
+\begin{proof}
+The absolute integral on each cell is bounded by the integral of the absolute value. Summing over disjoint cells and using $m_e\le1$ gives the first inequality. Cauchy--Schwarz applied to $|f-g|$ and the constant function $1$ gives the second.
+\end{proof}
+
+\begin{lemma}[Latent uncertainty and conditional fitting]\label{lem:posterior}
+Fix time, observed history, and action. Let true and learned rates be obtained from fields $f(z),\widehat f(z)$ by the same cell integration and mask. Suppose
+\begin{equation}\label{eq:field-lip}
+ \|\widehat f(z)-\widehat f(z')\|_{L^2(\nu)}
+ \le K\|z-z'\|_{\mathsf H}.
+\end{equation}
+Let $\pi,\widehat\pi\in\Ptwo(\mathsf H)$ and define
+\[
+ r=\int\|f(z)-\widehat f(z)\|_{L^2(\nu)}\,\pi(\dd z),
+ \qquad \kappa=W_2(\pi,\widehat\pi).
+\]
+Then the posterior-averaged observable intensities satisfy
+\begin{equation}\label{eq:rate-error}
+ \sum_e|\bar\lambda_e-\widehat{\bar\lambda}_e|
+ \le\sqrt M\,(r+K\kappa).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Insert the intermediate rate obtained by averaging $\widehat f$ under $\pi$.
+For the first difference, integrate \eqref{eq:cell-contraction} under $\pi$, obtaining $\sqrt M r$.
+For the second, let $(Z,\widehat Z)$ have any coupling of $\pi,\widehat\pi$. Jensen's inequality for absolute value, \Cref{lem:cells}, and \eqref{eq:field-lip} give
+\[
+ \sum_e\left|\E\widehat\lambda_e(Z)-\E\widehat\lambda_e(\widehat Z)\right|
+ \le\sqrt M K\,\E\|Z-\widehat Z\|
+ \le\sqrt M K\,(\E\|Z-\widehat Z\|^2)^{1/2}.
+\]
+Take the infimum over couplings. The result only needs $W_1$; using $W_2$ permits the orthogonal posterior certificate of the next section.
+\end{proof}
+
+\begin{theorem}[Path comparison through observable intensities]\label{thm:path}
+Under \Cref{ass:simulator}, let
+\begin{equation}
+ \delta_t(\Hist)=\sum_e
+ |\bar\lambda_e(t,\Hist,a_t)-\widehat{\bar\lambda}_e(t,\Hist,a_t)|.
+\end{equation}
+The observable path laws, including the event times, marks, and displayed states, satisfy
+\begin{equation}\label{eq:path-tv}
+ \TV(\mathbb P^a_{[0,T]},\widehat{\mathbb P}^a_{[0,T]})
+ \le \min\left\{1,\E^a\int_0^T\delta_t(\Hist_{t-})\dd t\right\}.
+\end{equation}
+If $\delta_t(\Hist)\le b(t)$ for a deterministic nonnegative integrable function on every common history, then also
+\begin{equation}\label{eq:uniform-path-tv}
+ \TV(\mathbb P^a_{[0,T]},\widehat{\mathbb P}^a_{[0,T]})
+ \le 1-\exp\left(-\int_0^T b(t)\dd t\right).
+\end{equation}
+\end{theorem}
+\begin{proof}
+For each mark use a common Poisson random measure on time and a nonnegative auxiliary coordinate, accepting a point when its auxiliary coordinate is below the respective intensity. Continue both constructions after they disagree, using their own histories. Each marginal has its prescribed law.
+
+Let $\sigma$ be the first time the accepted marked histories differ. Before $\sigma$ the observed states, actions, and histories coincide. For mark $e$, disagreement occurs when the auxiliary coordinate lies between the two intensities, an interval of length
+$|\bar\lambda_e-\widehat{\bar\lambda}_e|$. Consequently, the first-disagreement counting process has compensator
+\[
+ \int_0^{T\wedge\sigma}\delta_t(\Hist_{t-})\dd t.
+\]
+It follows that
+\[
+ \mathbb P(\sigma\le T)
+ =\E\int_0^T\mathbf1_{\{t<\sigma\}}\delta_t(\Hist_{t-})\dd t
+ \le\E^a\int_0^T\delta_t(\Hist_{t-})\dd t.
+\]
+After dropping the indicator, the expectation is under the true marginal. The probability that two coupled paths differ bounds their total variation, proving \eqref{eq:path-tv}.
+
+For the deterministic envelope, put $S(t)=\mathbb P(\sigma>t)$. The compensator identity gives an absolutely continuous survival function with
+$-S'(t)=\E[\mathbf1_{\{t<\sigma\}}\delta_t]\le b(t)S(t)$ almost everywhere.
+The integrating-factor inequality yields
+$S(T)\ge\exp(-\int_0^T b)$, proving \eqref{eq:uniform-path-tv}.
+\end{proof}
+
+No metric regularity of $\Delta$ enters the proof. A discontinuous price change after depletion is harmless on the event that the marked histories coincide. Conversely, the result does not compare two different matching engines: if the same mark causes different updates, agreement of intensities alone is insufficient.
+
+\begin{theorem}[The generative-operator market certificate]\label{thm:main}
+Under \Cref{ass:simulator}, assume the field representation and hypotheses of \Cref{lem:posterior} hold predictably along true histories, with finite
+$\E^a\int_0^T\sqrt M(r_t+K_t\kappa_t)\dd t$. Then
+\begin{equation}\label{eq:main}
+ \TV(\mathbb P^a_{[0,T]},\widehat{\mathbb P}^a_{[0,T]})
+ \le\min\left\{1,\sqrt M\,\E^a\int_0^T(r_t+K_t\kappa_t)\dd t\right\}.
+\end{equation}
+If implemented observable rates have an additional $\ell^1$ error
+$q_t(\Hist)$ relative to the rates just described, add
+$\E^a\int_0^T q_t(\Hist_{t-})\dd t$ inside the minimum.
+\end{theorem}
+\begin{proof}
+Insert \eqref{eq:rate-error} into \eqref{eq:path-tv}. For the implemented rates use the triangle inequality for their $\ell^1$ difference before applying the same comparison.
+\end{proof}
+
+The extra term can include numerical quadrature, posterior Monte Carlo, and other rate-evaluation errors only when an appropriate bound for the actual predictable implementation is available. A discrete-time sampler that rounds all event times to a grid can have a path law singular to a continuous-time event law. Such time rounding is not automatically represented by a small rate perturbation.
+
+\input{sections/04_sampling_likelihood}
+
+\subsection{Finite posterior sampling}
+Suppose the learned averaged rate is estimated at a fixed history from $N$ independent draws $\widehat Z_i\sim\widehat\pi$. For finite marks,
+\begin{equation}\label{eq:mc-rates}
+ \E\sum_e\left|
+ \frac1N\sum_{i=1}^N\widehat\lambda_e(\widehat Z_i)
+ -\E_{\widehat\pi}\widehat\lambda_e(\widehat Z)\right|
+ \le \frac1{\sqrt N}\sum_e
+ \sqrt{\operatorname{Var}_{\widehat\pi}(\widehat\lambda_e(\widehat Z))}.
+\end{equation}
+Indeed, each sample mean has variance divided by $N$, and Cauchy--Schwarz bounds its mean absolute error. This is a conditional expectation bound, not a deterministic uniform-in-history bound. Reusing particles or drawing them only at decision times changes their temporal dependence. To apply \Cref{thm:main}, include their randomness in the predictable simulation construction and verify the integrated error under that construction.
+
+\subsection{What resolution independence does and does not imply}
+The constant $\sqrt M$ is stable when physical cells are subdivided or quadrature is refined using a fixed reference measure. If instead an unweighted vector norm assigns unit mass to every newly added coordinate, $M$ grows with the representation. The resulting $\sqrt{|\mathcal E|}$ factor is then a change of geometry, not a contradiction.
+
+Neither \Cref{lem:cells} nor \Cref{thm:main} proves that a coarse book path is an autonomous projection of a fine book path. Fine events can change coarse transition probabilities, and hidden reserves can change future displayed behavior. The theorem controls the law generated at the stated physical event resolution. A claim of pathwise consistency across different market resolutions requires an additional compatible transition construction.

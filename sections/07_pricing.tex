@@ -1,0 +1,115 @@
+\section{A separate martingale construction for pricing}\label{sec:pricing}
+The preceding sections concern a physical market simulator with law $\mathbb P$.
+For pricing we now specify a separate probability measure $\mathbb Q$ and a deterministic strictly positive numeraire $B_n$. Write $X_n=S_n/B_n$ for the discounted underlying. This section constructs $\mathbb Q$-martingales; it does not derive a change of measure from the previously fitted $\mathbb P$ model.
+
+\subsection{Adapted generative volatility}
+On a discrete time grid with increments $\Delta_n>0$, let $\sigma_n$ be generated from current information, with
+$0\le\sigma_n\le\bar\sigma<\infty$. A conditional operator can map a past price path, volatility field, and fresh latent noise to $\sigma_n$, or to a field evaluated through a bounded linear observation. Reveal this latent noise before drawing the next return innovation. Let $\F_n$ be an enlarged simulation filtration containing the current state and generated $\sigma_n$, with $Z_{n+1}$ independent standard normal relative to $\F_n$. Separately let $\mathcal G_n\subseteq\F_n$ be the market information filtration, with $X_n$ adapted to $\mathcal G_n$. The tower property makes the constructed $X$ a $\mathcal G$-martingale as well. A claim paying $\Phi(X_N)$ is valued at $\E_{\mathbb Q}[\Phi(X_N)\mid\mathcal G_n]$; hidden simulation variables are integrated out unless the market filtration reveals them.
+
+\begin{theorem}[Positive generative martingale]\label{thm:martingale}
+For deterministic $X_0>0$, define
+\begin{equation}\label{eq:martingale-step}
+ X_{n+1}=X_n\exp\left(-\frac12\sigma_n^2\Delta_n+
+                              \sigma_n\sqrt{\Delta_n}Z_{n+1}\right).
+\end{equation}
+Then $(X_n)$ is a strictly positive integrable $\mathbb Q$-martingale. With
+$T_N=\sum_{n<N}\Delta_n$,
+\begin{equation}\label{eq:second-moment}
+ \E_\mathbb QX_N^2\le X_0^2e^{\bar\sigma^2T_N}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+The Gaussian exponential identity
+$\E e^{uZ}=e^{u^2/2}$ makes the multiplier in \eqref{eq:martingale-step} have conditional expectation one. Positivity is immediate, and iterated conditional expectation gives integrability and $\E[X_{n+1}\mid\F_n]=X_n$. For the second moment,
+\[
+ \E[X_{n+1}^2\mid\F_n]=X_n^2e^{\sigma_n^2\Delta_n}
+ \le X_n^2e^{\bar\sigma^2\Delta_n}.
+\]
+Iterating proves \eqref{eq:second-moment}.
+\end{proof}
+
+The artificial generation of a volatility field does not license using future return innovations when selecting $\sigma_n$. The independence condition is part of the construction. Correlation between future volatility and returns can be introduced through an adapted update after each return is observed.
+
+\begin{proposition}[Finite categorical martingale normalization]\label{prop:finite-martingale}
+Let $w_i\ge0$, $\sum_iw_i=1$, and $g_i>0$ on a finite nonempty scenario set. Define
+\[
+ m=\sum_iw_ig_i,\qquad R_i=g_i/m.
+\]
+Then $m>0$, $R_i>0$, and $\sum_iw_iR_i=1$. Hence a transition from $X_n=x$ to $xR_i$ with probabilities $w_i$ preserves conditional mean $x$.
+\end{proposition}
+\begin{proof}
+At least one $w_i$ is positive, so $m>0$. Positivity of $R_i$ follows, and
+$\sum_iw_i(g_i/m)=(\sum_iw_ig_i)/m=1$. Multiplying by $x$ gives the conditional-mean identity.
+\end{proof}
+
+This finite construction is mechanized in Lean. It is exact for the specified categorical distribution. Replacing a continuous model's normalizing expectation by a finite Monte Carlo estimate does not prove that the original continuous distribution has conditional mean one.
+
+\subsection{Coherent option prices}
+For a fixed discounted strike $k\ge0$, define
+\begin{equation}
+ c_n(k)=\E_\mathbb Q(X_n-k)_+.
+\end{equation}
+For a deterministic numeraire, a cash strike $K$ at maturity $n$ corresponds to $k=K/B_n$.
+
+\begin{proposition}[Strike and maturity restrictions]\label{prop:option-shape}
+For every $n$, $c_n(k)$ is decreasing, convex, and $1$-Lipschitz in $k$. For $m\le n$ and a fixed discounted strike,
+\[
+ c_m(k)\le c_n(k),\qquad
+ (X_0-k)_+\le c_n(k)\le X_0.
+\]
+\end{proposition}
+\begin{proof}
+The payoff $(x-k)_+$ has the first three properties pointwise in $k$, and expectation preserves them. Conditional Jensen and the martingale property give
+$\E[(X_n-k)_+\mid\F_m]\ge(X_m-k)_+$.
+Taking expectations proves the maturity relation. Jensen at time zero gives the lower bound, and $(X_n-k)_+\le X_n$ gives the upper bound.
+\end{proof}
+
+Pricing every included discounted claim by its $\mathbb Q$ conditional expectation gives a common martingale valuation. A generated surface with isolated strike penalties is not a substitute for such dynamic consistency. The statement above concerns fixed \emph{discounted} strikes; it does not assert unrestricted calendar monotonicity of cash-strike prices under arbitrary numeraires or dividends.
+
+\subsection{How volatility-operator error affects prices}
+\begin{theorem}[An adapted volatility-to-price estimate]\label{thm:vol-price}
+Construct $X,\widehat X$ by \eqref{eq:martingale-step} from the same $X_0$, time grid, and Gaussian innovations. Suppose $\sigma_n,\widehat\sigma_n$ are jointly adapted before $Z_{n+1}$ and both lie in $[0,\bar\sigma]$. Let
+\[
+ \mathcal A_N=\E\sum_{n<N}\Delta_n|\sigma_n-\widehat\sigma_n|^2.
+\]
+Then
+\begin{equation}\label{eq:vol-price}
+ W_1(\Law(X_N),\Law(\widehat X_N))
+ \le X_0e^{\bar\sigma^2T_N/2}
+       (1+\bar\sigma\sqrt{T_N})\sqrt{\mathcal A_N}.
+\end{equation}
+The same right-hand side times $L_\Phi$ bounds the expected-price difference for any $L_\Phi$-Lipschitz payoff $\Phi$ on discounted terminal prices.
+\end{theorem}
+\begin{proof}
+Put $Y_N=\log(X_N/X_0)$ and $\widehat Y_N=\log(\widehat X_N/X_0)$.
+Their difference is a predictable drift sum plus a martingale-difference sum:
+\[
+ Y_N-\widehat Y_N
+ =-\frac12\sum_{n<N}(\sigma_n^2-\widehat\sigma_n^2)\Delta_n
+ +\sum_{n<N}(\sigma_n-\widehat\sigma_n)\sqrt{\Delta_n}Z_{n+1}.
+\]
+Orthogonality of martingale differences gives squared $L^2$ norm
+$\mathcal A_N$ for the second sum. Since
+$|\sigma_n^2-\widehat\sigma_n^2|\le2\bar\sigma|\sigma_n-\widehat\sigma_n|$,
+weighted Cauchy--Schwarz bounds the $L^2$ norm of the first sum by
+$\bar\sigma\sqrt{T_N\mathcal A_N}$. Thus
+\[
+ \|Y_N-\widehat Y_N\|_{L^2}
+ \le(1+\bar\sigma\sqrt{T_N})\sqrt{\mathcal A_N}.
+\]
+The elementary inequality
+$|e^u-e^v|\le\tfrac12(e^u+e^v)|u-v|$ follows by integrating the exponential along the segment and using convexity:
+$\int_0^1e^{(1-s)v+su}\dd s\le(e^u+e^v)/2$.
+Together with Cauchy--Schwarz and
+\eqref{eq:second-moment} imply
+\[
+ \E|X_N-\widehat X_N|
+ \le\tfrac12\|X_N+\widehat X_N\|_{L^2}\|Y_N-\widehat Y_N\|_{L^2}
+ \le X_0e^{\bar\sigma^2T_N/2}
+       (1+\bar\sigma\sqrt{T_N})\sqrt{\mathcal A_N}.
+\]
+This particular coupling bounds $W_1$. The payoff claim follows from
+$|\Phi(x)-\Phi(y)|\le L_\Phi|x-y|$.
+\end{proof}
+
+The coupling assumption is substantive. An arbitrary optimal transport coupling of complete future volatility paths can reveal future innovations and need not be adapted. Equation \eqref{eq:vol-price} applies to a jointly constructed online pair of volatility generators, or to volatility scenarios sampled before all return innovations. It cannot be inferred from an unconstrained marginal fit to volatility surfaces alone.

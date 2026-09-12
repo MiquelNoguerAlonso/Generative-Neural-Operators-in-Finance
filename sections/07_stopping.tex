@@ -1,0 +1,36 @@
+\subsection{Exercise decisions require adapted path comparison}\label{sec:stopping}
+European prices depend on terminal distributions. Early exercise depends on when information arrives. Let $P,Q$ be two laws of a process on dates $0,\ldots,N$, equipped with their natural filtrations. A coupling $\gamma$ is \emph{bicausal} if the conditional law of either process's past given the other process's full path depends only on the other past, at every date. This prevents one process's present from revealing the other's future. Such adapted transport is established in mathematical finance \citep{backhoff2020,backhoff2022}.
+
+Let $G_n(x_{0:n})$ be an integrable nonanticipative discounted exercise payoff and suppose
+\[
+ |G_n(x_{0:n})-G_n(y_{0:n})|
+ \le L_G\max_{k\le n}|x_k-y_k|.
+\]
+Assume integrability of the path maxima and of $G_n(0)$. Write
+$\mathcal V(P)=\sup_\tau\E_PG_\tau(X_{0:\tau})$,
+where $\tau$ ranges over stopping times for the observed process.
+
+\begin{theorem}[Exercise-value stability under preserved information]\label{thm:stopping}
+For every bicausal coupling $\gamma$ of $P,Q$,
+\begin{equation}\label{eq:stopping-stability}
+ |\mathcal V(P)-\mathcal V(Q)|
+ \le L_G\E_\gamma\max_{n\le N}|X_n-Y_n|.
+\end{equation}
+Consequently the infimum of the right side over bicausal couplings is an adapted transport bound for exercise-value error.
+\end{theorem}
+\begin{proof}
+Take any stopping time $\tau$ for $X$. Under the coupling, condition its stopping rule on the full $Y$ path. Causality from $Y$ to $X$ makes the cumulative conditional probability of $\{\tau\le n\}$ measurable in $Y_{0:n}$. These cumulative probabilities define a randomized stopping rule for $Y$, implemented by an independent uniform variable. Its expected payoff is exactly $\E_\gamma G_\tau(Y_{0:\tau})$ by conditional expectation. Backward induction of the finite-date Snell envelope shows that independent randomization cannot increase the optimal stopping value: at each date a mixture of stopping and continuing cannot exceed their maximum. Hence
+\[
+ \E_PG_\tau(X)\le\mathcal V(Q)
+       +L_G\E_\gamma\max_n|X_n-Y_n|.
+\]
+Take the supremum over $\tau$ and repeat with $X,Y$ interchanged, using the other causality condition. This proves the absolute-value estimate without assuming an optimizer exists.
+\end{proof}
+
+\begin{example}[Equal terminal prices, different exercise values]\label{ex:early-information}
+Let the discounted stock start at one and end at $X_2\in\{0,2\}$ with equal probabilities. In model A, $X_1=X_2$; in model B, $X_1=1$. Both discounted stocks are martingales and have identical terminal laws. With constant interest rate $r>0$, consider the discounted American put payoff
+$G_n=(e^{-rn}-X_n)_+$ at dates $n=0,1,2$. Model A exercises at date one on the zero branch and has value $e^{-r}/2$. Model B waits until date two and has value $e^{-2r}/2$. Their common European date-two price is $e^{-2r}/2$.
+The example allows a zero discounted stock and is separate from the strictly positive lognormal construction. Its role is to isolate information timing. Terminal transport distance is zero while the exercise-value difference is strictly positive.
+\end{example}
+
+Shared innovations can produce a valid martingale coupling in an enlarged simulation filtration without being bicausal for the two observed price filtrations. Therefore \Cref{thm:vol-price} does not automatically imply \eqref{eq:stopping-stability}. An application to American claims must either verify the information-preserving coupling, work explicitly in a common exogenous information filtration, or provide a different stopping-time stability argument. This distinguishes physical event generation, terminal pricing, and sequential exercise decisions within one generative-model framework.

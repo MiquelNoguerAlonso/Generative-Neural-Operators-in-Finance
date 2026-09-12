@@ -1,0 +1,121 @@
+\section{Execution geometry, risk, and policy performance}\label{sec:execution}
+\subsection{Why liquidity transport has a financial meaning}
+Let $\Lambda=\sum_iq_i\delta_{p_i}$ be an ask-side volume measure with finite first moment and total mass $M_q>0$. Its increasing price quantile is
+\[
+ p_\Lambda(u)=\inf\{p:\Lambda((-\infty,p])\ge u\},
+ \qquad 0<u<M_q.
+\]
+The immediate cost of sweeping quantity $Q\in[0,M_q]$ is
+\begin{equation}\label{eq:sweep}
+ C_\Lambda(Q)=\int_0^Qp_\Lambda(u)\dd u.
+\end{equation}
+This static operation does not predict replenishment, adverse selection, or how the market responds during a long execution.
+
+\begin{theorem}[Liquidity transport controls sweep cost]\label{thm:sweep}
+If $\Lambda,\Gamma$ have the same finite mass $M_q$, then for every $Q\in[0,M_q]$,
+\begin{equation}\label{eq:sweep-bound}
+ |C_\Lambda(Q)-C_\Gamma(Q)|
+ \le M_qW_1(\Lambda/M_q,\Gamma/M_q).
+\end{equation}
+The constant $M_q$ is sharp.
+\end{theorem}
+\begin{proof}
+The left side is bounded by
+$\int_0^Q|p_\Lambda(u)-p_\Gamma(u)|\dd u$ and hence by the integral over $[0,M_q]$. The one-dimensional quantile formula for $W_1$, followed by the change of variables $u=M_qv$, identifies that integral with the right side. If all prices of one book are shifted upward by a fixed amount and $Q=M_q$, equality holds.
+\end{proof}
+
+For unequal masses one must specify what unfilled quantity costs. A useful convention fixes a common required capacity and augments missing mass at a declared penalty price. The resulting inequality controls execution plus that penalty. It does not assert that additional liquidity is available at the penalty price.
+
+Ranked queue vectors without their price geometry can obscure this distinction. Moving one lot by one tick and moving it by fifty ticks can produce the same unweighted coordinate discrepancy. The transport cost includes the price displacement.
+
+\subsection{Bounded execution costs and event probabilities}
+Let $P,\widehat P$ be two laws on a common observable path space, and suppose $\TV(P,\widehat P)\le\epsilon$. An execution functional may include fills, cash paid, fees, remaining inventory, and a terminal penalty. Assume first that it takes values in a known interval $[0,B]$. A finite price window, bounded total trade quantity, bounded fees, and a capped terminal penalty provide one way to meet this assumption.
+
+\begin{theorem}[Decision guarantees from path total variation]\label{thm:risk}
+For every measurable path event $A$ and measurable $C:\Omega\to[0,B]$,
+\begin{align}
+ |P(A)-\widehat P(A)|&\le\epsilon,\label{eq:event-bound}\\
+ |\E_PC-\E_{\widehat P}C|&\le B\epsilon.\label{eq:cost-bound}
+\end{align}
+For $0<\alpha<1$, define
+\begin{equation}\label{eq:cvar}
+ \CVaR_\alpha^P(C)
+ =\inf_{z\in\R}\left\{z+\frac{\E_P(C-z)_+}{1-\alpha}\right\}.
+\end{equation}
+Then
+\begin{equation}\label{eq:cvar-bound}
+ |\CVaR_\alpha^P(C)-\CVaR_\alpha^{\widehat P}(C)|
+ \le B\min\left\{1,\frac{\epsilon}{1-\alpha}\right\}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+The event bound is the definition of total variation. For the expectation bound, the layer-cake formula gives
+\[
+ \E_PC-\E_{\widehat P}C
+ =\int_0^B[P(C>u)-\widehat P(C>u)]\dd u.
+\]
+Its absolute value is at most $B\epsilon$.
+
+For $C\in[0,B]$, the infimum in \eqref{eq:cvar} can be restricted to $z\in[0,B]$. For every such $z$, $(C-z)_+$ lies in $[0,B]$, so the two objectives differ by at most $B\epsilon/(1-\alpha)$. Uniformly bounded differences of functions bound the difference of their infima. Finally, both CVaR values lie in $[0,B]$, giving the minimum with $B$.
+\end{proof}
+
+At confidence level $0.99$, the worst-case CVaR amplification is $100$. A bound adequate for average cost can be uninformative about tail risk. The scale $B$ also matters: normalizing a plotted loss does not remove the monetary scale from a decision.
+
+\begin{proposition}[Value at risk need not be stable]\label{prop:var}
+For every $\alpha\in(0,1)$ and every $\epsilon\in(0,\alpha)$ there are costs supported on $\{0,1\}$ whose laws have total variation $\epsilon$ and whose lower $\alpha$-quantiles differ by one.
+\end{proposition}
+\begin{proof}
+Put mass $\alpha$ at zero under $P$ and mass $\alpha-\epsilon$ at zero under $\widehat P$, with the remaining mass at one. Their total variation is $\epsilon$. With
+$\operatorname{VaR}_\alpha=\inf\{c:P(C\le c)\ge\alpha\}$,
+the quantiles are zero and one.
+\end{proof}
+
+\begin{proposition}[An extension to unbounded costs]\label{prop:unbounded}
+Suppose $p>1$, $\|C\|_{L^p(P)}\le A$, and
+$\|C\|_{L^p(\widehat P)}\le\widehat A$. Then
+\begin{equation}
+ |\E_PC-\E_{\widehat P}C|
+ \le(A+\widehat A)\epsilon^{\,1-1/p}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Take a maximal coupling of the path laws on their standard Borel path space. The paths agree outside an event of probability $\TV(P,\widehat P)\le\epsilon$. On that event, bound the absolute cost difference by the sum of absolute costs and apply H\"older's inequality to each term.
+\end{proof}
+
+Without either a bounded cost range or uniform moment control, arbitrarily small total variation can coexist with arbitrarily large expected-cost errors. This is why the price and inventory assumptions cannot be omitted from an execution guarantee.
+
+\subsection{The value of a policy chosen in a learned market}
+Let $\mathcal A$ be a nonempty class of predictable policies, and let
+$J(a)=\E_{\mathbb P^a}C_a$ and
+$\widehat J(a)=\E_{\widehat{\mathbb P}^a}C_a$.
+Each $C_a$ is the same functional of action and observed path in the two models and lies in $[0,B]$.
+
+\begin{theorem}[Uniform policy-transfer bound]\label{thm:regret}
+Suppose
+$\sup_{a\in\mathcal A}\TV(\mathbb P^a,\widehat{\mathbb P}^a)\le\epsilon$.
+If $\widehat a$ is $\eta$-optimal for the learned model, then
+\begin{equation}\label{eq:regret}
+ J(\widehat a)-\inf_{a\in\mathcal A}J(a)\le2B\epsilon+\eta.
+\end{equation}
+For a CVaR objective, the same argument gives
+$2B\min\{1,\epsilon/(1-\alpha)\}+\eta$.
+\end{theorem}
+\begin{proof}
+For every comparator $a$,
+\[
+ J(\widehat a)
+ \le\widehat J(\widehat a)+B\epsilon
+ \le\widehat J(a)+\eta+B\epsilon
+ \le J(a)+2B\epsilon+\eta.
+\]
+Take the infimum over $a$. The infimum need not be attained. For CVaR replace the expectation bound by \eqref{eq:cvar-bound}.
+\end{proof}
+
+This is the model-based reinforcement-learning simulation-lemma argument, here applied to continuous-time observable path laws \citep{kearns2002}. The financial contribution is supplying its premise through fields, beliefs, and valid event generation. An average error over a logged policy is not the uniform premise of this theorem. A model optimizer can select actions precisely where the model is inaccurate. Likewise, an unconstrained learned policy can leave the price, volume, or action region on which the bound was established.
+
+\subsection{Horizon dependence is unavoidable}
+The exponential path bound can be attained. Let the true process have no events and the learned process be Poisson with rate $b>0$. Their laws agree exactly when the learned process has no arrival. Therefore
+\[
+ \TV(P_{[0,T]},\widehat P_{[0,T]})=1-e^{-bT}.
+\]
+A small local rate discrepancy can thus become a large full-path discrepancy at a long horizon. Terminal-state errors can be smaller because paths that diverge may later reach the same state. The numerical section reports terminal TV and a full-path upper bound separately.

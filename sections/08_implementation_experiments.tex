@@ -1,0 +1,141 @@
+\section{Operator implementation and reproducible illustrations}\label{sec:numerics}
+\subsection{A concrete architecture}
+The mathematical specification admits the following implementation. First reconstruct the displayed state from the event stream, retaining the information required by the chosen transition model. Second update an observed-history representation containing elapsed time and recent order flow. Third specify the predictable posterior kernel at every evaluation time, including quiet intervals. At each thinning proposal, draw a fresh latent field, integrate its rate field over physical event cells, and use \Cref{prop:posterior-thinning} to accept or reject a mark. Apply the prescribed transition only after acceptance. Exact posterior averaging with the same thinning envelope is an equivalent implementation.
+
+An integral neural-operator layer can take the form
+\begin{equation}\label{eq:layer}
+ h_{\ell+1}(u)=\varphi\left(
+ W_\ell h_\ell(u)+
+ \int_A k_{\theta,\ell}(u,v,\Hist)h_\ell(v)\nu(\dd v)
+ +b_\ell(u,\Hist)\right).
+\end{equation}
+Use quadrature weights when discretizing the integral. A rate decoder such as
+$\widehat f=\softplus(F_\theta)$ ensures nonnegativity. Pointwise softplus is $1$-Lipschitz, so an $L^2$ latent sensitivity bound for $F_\theta$ transfers to the rate field. A common observed-state mask is also nonexpansive. A hidden-state feasibility indicator or integer decoder needs its own analysis and can destroy this property.
+
+A sufficient global envelope for \Cref{ass:simulator} can be imposed by a bounded rate decoder. An unconstrained softplus output gives positivity but not a deterministic global rate bound. One can instead establish nonexplosion through an explicit Lyapunov argument and use a stopped version of the path comparison. Neither property should be inferred from a finite simulation that happened not to explode.
+
+Conditional flow matching trains detail generators using population regression objectives approximated by data. A rate model can use the point-process negative log-likelihood
+\begin{equation}\label{eq:likelihood}
+ \mathcal L_{\rm rate}(\theta)
+ =\int_0^T\sum_e\widehat{\bar\lambda}_{\theta,e}(t,\Hist_{t-})\dd t
+ -\sum_{k:t_k\le T}\log
+   \widehat{\bar\lambda}_{\theta,e_k}(t_k,\Hist_{t_k-}).
+\end{equation}
+Likelihood is a statistical objective, not the value of the certificate. To use \eqref{eq:combined}, a learning analysis must control the conditional field error, posterior error, and relevant sensitivities under the required history distribution. For latent models, optimizing an observed likelihood does not by itself identify the latent decomposition.
+
+\subsection{Hidden-regime filtering}
+The first experiment uses \Cref{prop:poisson-filter} with one mark, rates
+$\lambda_0=1$, $\lambda_1=4$, prior $p=1/2$, and observation horizon $4$.
+The realized regime is the fast regime. A fixed seed produces fourteen arrivals.
+The final posterior probability of that regime is $0.999394$. The conditional probability of at least four arrivals in the next unit of time is
+\[
+ (1-p_t)\mathbb P(\operatorname{Pois}(1)\ge4)
+ +p_t\mathbb P(\operatorname{Pois}(4)\ge4).
+\]
+Its final value is $0.566198$, compared with the snapshot-prior value $0.292759$.
+This is an arrival-count forecast. Interpreting it as a fill probability requires an explicit queue-ahead and event-allocation model.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{figures/hidden_liquidity_filter.png}
+ \caption{A synthetic fast-regime path and its exact Bayesian filter. Quiet intervals lower the fast-regime probability; arrivals raise it. The right panel shows the resulting forecast for a future arrival-count threshold. The latent regime is not an undepleted hidden reserve.}
+ \label{fig:filter}
+\end{figure}
+
+\subsection{Exact queue depletion and a path-law certificate}
+The second experiment is a continuous-time Markov chain on queue states
+$\{0,1,\ldots,6\}$, with state $0$ absorbing. At state $n>0$, the death rate is
+$d(n)=1+0.25n$; the birth rate is $1.2$ if $n<6$ and zero at capacity.
+The initial state is $4$ and the horizon is $T=2$.
+The learned model replaces $d(n)$ by $(1+\theta)d(n)$, leaving births unchanged.
+
+Let $Q$ be the true generator, using row-vector distributions.
+Matrix exponentiation gives
+$p_T=e_4^\top e^{TQ}$ and the corresponding learned distribution.
+The mean-integrated discrepancy is
+\begin{equation}
+ \E\int_0^T\delta_t\dd t
+ =\theta\,e_4^\top\left(\int_0^Te^{tQ}\dd t\right)d
+ =3.5212578021\,\theta.
+\end{equation}
+We evaluate the integral as the upper-right block of
+$\exp\bigl(T\left[\begin{smallmatrix}Q&I\\0&0\end{smallmatrix}\right]\bigr)$,
+which avoids inverting the singular generator.
+The true depletion probability is $0.1693829524$.
+
+\begin{table}[htbp]
+ \centering\small
+ \input{tables/queue}
+ \caption{Exact finite-state calculations up to matrix-exponential precision. Depletion bias and terminal TV are measured distributional errors. The $L^1$ and KL columns are full-path TV upper bounds. The final column bounds the absolute CVaR difference divided by cost range $B$, using the smallest available path bound.}
+ \label{tab:queue}
+\end{table}
+
+At $\theta=0.10$, the depletion probability changes by $0.044909$, terminal TV is $0.059619$, and the mean path bound is $0.352126$. The certificate is conservative but valid. At $\theta=0.20$, the deterministic-envelope bound $0.632121$ is smaller than the mean-integrated bound $0.704252$; either can be used.
+For this multiplicative perturbation the exact path KL divergence is
+\[
+ D_{\rm KL}(P\|\widehat P)=3.5212578021\,[\theta-\log(1+\theta)].
+\]
+At $\theta=0.10$, Pinsker therefore gives $0.09087$, substantially below the $L^1$ bound while still above terminal TV. At $\theta=0.001$, its 99-percent CVaR error bound is $0.09379B$; at $0.002$, it is $0.18753B$. With the original $L^1$ route alone, a nontrivial 99-percent bound requires $\theta<0.002839894$. The added small-error regimes and likelihood comparison make the informative and vacuous ranges explicit. None of these upper bounds is measured full-path TV.
+
+\subsection{Posterior resolution and a persistent fitting floor}
+Take $\mathsf H=L^2(0,1)$ with an orthonormal basis $(e_j)_{j\ge1}$ and target field
+\[
+ Z=\sum_{j\ge1}\frac{\xi_j}{j}e_j,\qquad \xi_j\stackrel{\rm iid}{\sim}N(0,1).
+\]
+The learned level-$m$ field has independent coefficients
+$[\beta+(1+\eta)\xi_j]/j$ for $j\le m$ and zero coefficients above $m$.
+Set $\beta=0.04$ and $\eta=0.06$. Since the covariance operators are diagonal in the same basis, the exact Gaussian Wasserstein error is
+\begin{equation}\label{eq:gaussian-posterior}
+ \kappa_m^2=\sum_{j>m}j^{-2}
+ +(\beta^2+\eta^2)\sum_{j=1}^mj^{-2}.
+\end{equation}
+This is also the context-independent refinement certificate with $L_j=0$.
+For the illustrative density $f_z(u)=1.2+0.4\tanh z(u)$, positivity and
+$K=0.4$ hold on $L^2(0,1)$ and $M=1$.
+The local posterior-induced rate-error bound is therefore $0.4\kappa_m$.
+
+At $m=256$, $\kappa_m=0.111499$ and the local rate bound is $0.044600$.
+The limiting posterior error is $0.092486$, because finer resolution does not remove the bias and variance mismatch in retained coordinates.
+This calculation concerns one conditional posterior and its local rate map. Extending it to a complete market path requires the predictable-history assumptions of \Cref{cor:combined}; a one-time Gaussian calculation alone does not establish them.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{figures/event_error_certificate.png}
+ \caption{Left: exact terminal distribution errors and two full-path upper bounds for the queue chain. Right: the Gaussian posterior calculation \eqref{eq:gaussian-posterior}, its unresolved tail, and the induced local intensity bound. The horizontal dotted line is the persistent posterior fitting floor.}
+ \label{fig:certificate}
+\end{figure}
+
+\subsection{Liquidity geometry and analytic option prices}
+Two static ask books share prices
+$(100,100.01,100.03,100.06)$ and have volumes $(2,3,2,3)$ and $(1,2,4,3)$.
+Both have ten lots. Their normalized volume transport distance times ten is
+$0.05$, exactly the difference between the costs of buying all ten lots.
+The partial-quantity costs satisfy \Cref{thm:sweep} at every quantity.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{figures/execution_geometry.png}
+ \caption{A sharp static sweep-cost example. The right panel subtracts the common cost $100Q$ to expose the liquidity contribution. The final gap is $0.05$ currency units for ten lots under the stated unit convention.}
+ \label{fig:geometry}
+\end{figure}
+
+For the pricing illustration, draw a volatility $\sigma\in\{0.15,0.35\}$ with equal probabilities before all return innovations, take $X_0=100$, and use zero interest. Conditional on $\sigma$, use the martingale construction.
+Take $\mathcal G_0$ trivial, so the volatility draw is hidden from the market at the pricing origin. The time-zero option price is then the equally weighted mixture of the two analytic lognormal call prices. If the draw is revealed instead, the conditional price is the price for that realized volatility, rather than the mixture.
+At-the-money calls at maturities $0.25,0.5,1,2$ have prices
+$4.981979$, $7.038809$, $9.935283$, and $13.996948$.
+No option-pricing Monte Carlo is needed for these numbers.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{figures/martingale_pricing.png}
+ \caption{A positive mixture martingale with analytic call prices. Omitting the $-\sigma^2T/2$ correction makes the expected discounted stock rise from $100$ to $107.653708$ at $T=2$. Including it keeps that expectation exactly $100$. This is an explicit illustrative generator, not a trained volatility model.}
+ \label{fig:pricing}
+\end{figure}
+
+\input{sections/08_complete_model}
+\input{sections/08_control_experiment}
+
+\subsection{Reproducibility and limits of the calculations}
+The initial Python program regenerates four PNG figures, the queue table, and its JSON results. The reserve and observed-control programs add their respective figures, tables, learned parameters, and full diagnostic records. Each program records its seeds and software versions. It checks the filter against an independent Bayes calculation; generator row sums and integrated occupation time; probability and terminal-TV inequalities; the sharp sweep-cost example; call monotonicity and convexity on the reported grid; and reserve conservation and nonnegativity over 784 admissible integer event combinations.
+
+These are useful consistency checks, but they are not proofs of the continuous statements. The Lean project verifies selected universal statements exactly, while the manuscript proves the analytic results. The new reserve experiment trains a rate network on known synthetic specifications, audits every deployed state/action, and compares exact decision values. The other illustrations remain explicit mathematical examples. No exchange-data calibration or investment-performance claim is made.

@@ -1,0 +1,127 @@
+\section{From observed events to certified execution decisions}\label{sec:certified-control}
+A full-path total-variation bound protects every bounded payoff, but pays for differences that may have little economic effect. This section connects rate estimation to the particular execution objective and to a policy chosen from the estimated model. The statistical result uses recorded event counts and occupation times. Its scope is a finite observable Markov state; latent-state exposures cannot be read from a displayed book without an additional identification or filtering argument.
+
+\subsection{An exact identity weighted by continuation value}
+Let $\mathcal S$ and $\mathcal A$ be finite state and action sets. Mark $e$ changes state $x$ to $\Delta_e(x)$ at rate $\lambda_e(x,a)$. A common Markov policy $a=\pi(t,x)$ is used in two models with rates $\lambda$ and $\widehat\lambda$. Rates are bounded and nonnegative. Both models use running cost $c(t,x,a)$, mark cost $g_e(t,x,a)$, and terminal cost $h(x)$, all bounded. Let $V^\pi$ and $\widehat V^\pi$ denote their expected remaining costs. The learned value solves the finite backward equation
+\begin{equation}\label{eq:backward-value}
+ -\partial_t\widehat V^\pi(t,x)
+ =c(t,x,a)+\sum_e\widehat\lambda_e(x,a)
+ \{g_e(t,x,a)+\widehat V^\pi(t,\Delta_e(x))-\widehat V^\pi(t,x)\},
+ \qquad \widehat V^\pi(T,x)=h(x).
+\end{equation}
+Bounded piecewise-continuous coefficients are sufficient; derivatives can be interpreted almost everywhere.
+
+\begin{theorem}[Continuation-value sensitivity]\label{thm:continuation}
+Put
+$\Gamma_e^\pi(t,x)=g_e(t,x,\pi(t,x))+\widehat V^\pi(t,\Delta_e(x))-\widehat V^\pi(t,x)$.
+For a common initial state $x_0$,
+\begin{equation}\label{eq:continuation-identity}
+ V^\pi(0,x_0)-\widehat V^\pi(0,x_0)
+ =\E_\lambda^\pi\int_0^T\sum_e
+ (\lambda_e-\widehat\lambda_e)(X_t,\pi(t,X_t))
+ \Gamma_e^\pi(t,X_t)\,\dd t.
+\end{equation}
+If $|\lambda_e-\widehat\lambda_e|\le u_e$ on the relevant state-action pairs, then the absolute value is at most
+\begin{equation}\label{eq:continuation-bound}
+ \E_\lambda^\pi\int_0^T\sum_eu_e(X_t,\pi(t,X_t))
+ |\Gamma_e^\pi(t,X_t)|\,\dd t
+ \le\int_0^T\max_x\sum_eu_e(x,\pi(t,x))|\Gamma_e^\pi(t,x)|\,\dd t.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Apply the time-dependent Dynkin identity under the true rates to $\widehat V^\pi(t,X_t)$. Add the expected running and mark costs; the latter are their compensator integrals. Subtract \eqref{eq:backward-value}. The terminal values agree, and the remaining integrand is exactly the rate difference multiplied by $\Gamma_e^\pi$. Bounded rates on a finite horizon justify the expectations, including bounded costs per event. Taking absolute values and then bounding an expectation by a maximum proves \eqref{eq:continuation-bound}.
+\end{proof}
+
+This is a finite-state performance-difference identity derived from the backward equation. Its contribution here is the computable connection between event-rate uncertainty and the financial value of each event. An erroneous event with zero continuation-value difference has no first-order or higher-order contribution to this identity. The weight is the learned continuation value along the true state occupancy; simply replacing that occupancy by a learned one without correction changes the bound. The second expression in \eqref{eq:continuation-bound} avoids that substitution. Running-cost and mark-cost misspecification can be included as separate terms by the same subtraction.
+
+\subsection{Rate intervals valid under adaptive observation}
+Index the estimable state-action-mark triples by $i=1,\ldots,d$. Let $N_i(t)$ count events of that triple and
+$E_i(t)=\int_0^t\mathbf1\{(X_{s-},a_s)=(x_i,a_i)\}\,\dd s$
+be its observed exposure. The mark-specific compensator is $\lambda_iE_i(t)$. The behavior policy may depend predictably on previous observations. Suppose the rates are constant in the specified state representation and $0\le\lambda_i\le\Lambda_i$ is a justified envelope. Reset episodes can be concatenated; observed reset times do not count as market marks.
+
+Choose a finite positive grid $\eta_1,\ldots,\eta_R$ before looking at the data and put $b_\delta=\log(2dR/\delta)$. For positive exposure define
+\begin{align}\label{eq:rate-intervals}
+ \underline\lambda_i(t)
+ &=\max\left\{0,\max_r
+ \frac{\eta_rN_i(t)-b_\delta}{(e^{\eta_r}-1)E_i(t)}\right\},\\
+ \overline\lambda_i(t)
+ &=\min\left\{\Lambda_i,\min_r
+ \frac{\eta_rN_i(t)+b_\delta}{(1-e^{-\eta_r})E_i(t)}\right\}.\notag
+\end{align}
+At zero exposure use $[0,\Lambda_i]$.
+
+\begin{theorem}[Simultaneous event-rate confidence sequences]\label{thm:rate-confidence}
+With probability at least $1-\delta$, every interval in \eqref{eq:rate-intervals} contains its true rate, simultaneously for all indices and all observation times. The conclusion remains valid at a data-dependent stopping time and for a policy fitted after stopping.
+\end{theorem}
+\begin{proof}
+For fixed $i$ and any real $\eta$, the counting-process exponential
+\[
+ M_{i,\eta}(t)=\exp\{\eta N_i(t)-(e^\eta-1)\lambda_iE_i(t)\}
+\]
+is a nonnegative local martingale, hence a supermartingale with initial value one. This follows from the compensated jump formula; predictability of the occupation indicator supplies the compensator even under adaptive actions. Ville's inequality bounds the probability that it ever exceeds $e^{b_\delta}$ by $e^{-b_\delta}$. Apply this to $\eta_r$ and $-\eta_r$ for each $i,r$. Rearranging the two inequalities gives the lower and upper endpoints. The union of $2dR$ failure events has probability at most $\delta$. Intersecting with the known envelope preserves coverage. The event is already uniform in time, so stopping and subsequent policy fitting do not alter it.
+\end{proof}
+
+The exponential-supermartingale method and time-uniform inference are established tools \citep{howard2020}; the explicit inversion above supplies rate boxes for this simulator. The finite grid is retained in the probability budget. Optimizing over an uncountable grid with the same budget would not be justified. If the computed intersection is empty, the procedure reports an inconsistent confidence set rather than silently reordering its endpoints. Time variation beyond the specified state, unobserved reserve state, or omitted marks can violate the intensity model even when numerical intervals look narrow.
+
+\subsection{Robust policy choice without a uniform worst-case payoff range}
+Freeze the rate boxes at the chosen observation time. For each state and action, let
+$\mathcal U_{x,a}=\prod_e[\underline\lambda_e(x,a),\overline\lambda_e(x,a)]$.
+The uncertainty is rectangular: nature is allowed to choose rates separately at each state, action, and time. This enlarged class contains every fixed true rate vector in the boxes. It may be conservative when rates share parameters.
+
+For a vector $v$ put $\gamma_e(v)=g_e+v(\Delta_e(x))-v(x)$ and define
+\begin{align}\label{eq:robust-hamiltonians}
+ H^+(t,x,v)&=\min_a\left[c(t,x,a)+
+       \max_{q\in\mathcal U_{x,a}}\sum_eq_e\gamma_e(v)\right],\\
+ H^-(t,x,v)&=\min_a\left[c(t,x,a)+
+       \min_{q\in\mathcal U_{x,a}}\sum_eq_e\gamma_e(v)\right].\notag
+\end{align}
+Each inner maximizer chooses the upper endpoint when $\gamma_e(v)\ge0$ and the lower endpoint otherwise; the minimizer reverses this choice. Let $U,L$ solve $-\partial_tU=H^+(t,x,U)$ and $-\partial_tL=H^-(t,x,L)$ with terminal vector $h$. Finite sets and bounded boxes make these ODEs globally Lipschitz in the value vector. Let $\pi^+$ select a minimizing action in $H^+$.
+
+\begin{theorem}[An execution policy with an observable regret certificate]\label{thm:robust-policy}
+On the event of \Cref{thm:rate-confidence}, for every initial state,
+\begin{equation}\label{eq:robust-sandwich}
+ L(0,x)\le V_\lambda^*(0,x)
+ \le V_\lambda^{\pi^+}(0,x)\le U(0,x).
+\end{equation}
+In particular the regret of the chosen policy is bounded by $U(0,x)-L(0,x)$ with simultaneous confidence at least $1-\delta$.
+\end{theorem}
+\begin{proof}
+For every action and true rate vector in its box,
+$-\partial_tL\le c+\sum_e\lambda_e(g_e+L\circ\Delta_e-L)$.
+Dynkin's identity implies that $L$ is no greater than the true expected cost of every admissible policy, including history-dependent randomized policies. Taking their infimum gives the first inequality. For the selected action $\pi^+$, the reversed inequality holds for $U$, because its Hamiltonian maximizes over a box containing the true rates. The same identity bounds the cost of $\pi^+$ by $U$. The middle inequality is the definition of the optimum. The construction uses the confidence event pointwise, so its data-dependent action selection is covered.
+\end{proof}
+
+The result combines an event-data confidence event, an admissible transition mechanism, and a finite robust control problem. Robust uncertainty in Markov transition rates predates this construction \citep{kalyanasundaram2004}; neither dynamic programming nor rectangular uncertainty is claimed as new. Here the interval width has a recorded sampling origin, and the resulting execution guarantee covers selection of the deployed policy.
+
+For a finite candidate policy family, a simpler alternative is available. If
+$|J(\pi)-\widehat J(\pi)|\le r(\pi)$ simultaneously and the chosen policy satisfies
+$\widehat J(\widehat\pi)+r(\widehat\pi)
+\le\inf_\pi\{\widehat J(\pi)+r(\pi)\}+\eta$, then
+\begin{equation}\label{eq:pessimistic-oracle}
+ J(\widehat\pi)\le J(\pi)+2r(\pi)+\eta\qquad\hbox{for every comparator }\pi.
+\end{equation}
+Indeed, bound the chosen true cost by its upper estimate, apply the selection inequality, and bound the comparator's upper estimate by $J(\pi)+2r(\pi)$. This comparator-dependent bound can remain informative when the least explored policy has a very wide interval. Lean checks the universal selection inequality, independently of how valid radii are supplied.
+
+\subsection{Accounting for the numerical control solver}
+A mathematical HJB certificate should not be identified with an unchecked numerical solution. For the time-homogeneous model used below, change to remaining time $s=T-t$ and solve $u'=H(u)$, $u(0)=h$. Let
+$\Lambda=\max_{x,a}\sum_e\overline\lambda_e(x,a)$.
+Both Hamiltonians are $2\Lambda$-Lipschitz in the sup norm, preserve addition of a constant, and satisfy the comparison principle.
+
+\begin{proposition}[A residual bound for explicit control steps]\label{prop:control-residual}
+On a grid $s_n=nh$, with $h\Lambda\le1$, set $u_{n+1}=u_n+hH(u_n)$. The piecewise-linear interpolation satisfies
+\begin{equation}\label{eq:control-residual}
+ \|u(T)-u_N\|_\infty
+ \le\mathcal R_N:=\Lambda h^2\sum_{n<N}\|H(u_n)\|_\infty.
+\end{equation}
+For the upper Hamiltonian, use on each time interval its action selected at the corresponding grid vector. The true continuous-time cost of this piecewise-constant-in-time feedback policy is at most $u_N^+(x)+\mathcal R_N^+$. The optimal true cost is at least $u_N^-(x)-\mathcal R_N^-$. Thus a numerical regret upper bound is
+$u_N^+(x)-u_N^-(x)+\mathcal R_N^++\mathcal R_N^-$.
+\end{proposition}
+\begin{proof}
+Within a step the interpolant $w$ has derivative $H(u_n)$ and
+$\|w(s)-u_n\|_\infty=(s-s_n)\|H(u_n)\|_\infty$.
+Its residual satisfies
+$\|w'-H(w)\|_\infty\le2\Lambda(s-s_n)\|H(u_n)\|_\infty$.
+Translation invariance and comparison bound the global sup-norm error by the integral of this residual, rather than an exponential Gronwall factor. Integration over each step gives \eqref{eq:control-residual}. For the selected upper action, hold that action fixed within the step. Its maximized rate Hamiltonian has the same Lipschitz constant and agrees with $H^+$ at the grid vector. Adding the integrated residual gives a supersolution for that policy under every rate vector in the box. The Dynkin argument of \Cref{thm:robust-policy} proves the asserted cost bound. The lower interpolation minus its residual is a subsolution for every policy. Finally subtract the two bounds. The step condition makes the Euler update monotone; the residual argument additionally controls its continuous-time interpretation.
+\end{proof}
+
+The residual controls time discretization. Floating-point evaluation requires its own arithmetic allowance for a machine-certified numerical enclosure. The experiments report double-precision evaluations of the theorem-derived bound and verify refinement of the time grid; they do not label floating-point arithmetic as an interval proof.

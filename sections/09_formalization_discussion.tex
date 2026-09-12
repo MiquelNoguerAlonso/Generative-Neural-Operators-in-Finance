@@ -1,0 +1,103 @@
+\section{Formal verification and remaining analytic obligations}\label{sec:lean}
+The accompanying project uses Lean 4.19.0 and the matching pinned mathlib release
+\citep{demoura2021,mathlib2020}. It contains 40 theorem declarations with checked proof terms. The count includes supporting lemmas and the refinement results also used in the general operator paper; it is not a count of new mathematical contributions.
+
+\subsection{Finite probability and executable market accounting}
+The Lean structure \texttt{FiniteLaw} contains a function assigning a real mass to each outcome of an arbitrary finite type, a proof that all masses are nonnegative, and a proof that they sum to one. Expectations and total variation are defined from those masses, with
+$\TV(P,Q)=\frac12\sum_i|p_i-q_i|$.
+The project proves total variation's nonnegativity, symmetry, and triangle inequality. It then proves
+\[
+ \left|\sum_ip_iC_i-\sum_iq_iC_i\right|\le B\TV(P,Q)
+ \quad\text{whenever }0\le C_i\le B.
+\]
+The argument subtracts $B/2$ from the payoff and uses equal total mass, preserving the sharp range constant $B$. Indicator payoffs give the event-probability bound. These are the finite-law versions of \Cref{thm:risk}, not an encoding of continuous-time event-path measures.
+
+The reserve module contains an executable transition that accepts an event only when the execution fits displayed inventory and the replenishment fits hidden inventory. It returns either a new pair of natural-number inventories or rejection. Lean proves that every accepted event satisfies
+$D'+H'+q=D+H$, and that every accepted finite replay satisfies
+\[
+ D_{\rm final}+H_{\rm final}+\sum_kq_k=D_{\rm initial}+H_{\rm initial}.
+\]
+This verifies conservation with natural-number subtraction and explicit rejection of invalid quantities. It does not purport to formalize a complete exchange's allocation, priority, or refresh rules.
+
+\subsection{Finite histories and posterior acceptance}
+The path-law module constructs a normalized joint law from a finite history distribution $P$ and a conditional next-mark kernel $K$, with mass $p(x)K(x,e)$. It proves directly from these masses that
+\[
+ \TV(P\otimes K,Q\otimes L)
+ \le\TV(P,Q)+\sum_xp(x)\TV(K(x),L(x)).
+\]
+It then recursively constructs distributions on complete finite histories, retaining every mark. If the conditional next-mark discrepancies are at most $\epsilon_n$ on every history, Lean proves
+\[
+ \TV(P_{0:N},Q_{0:N})\le\sum_{n<N}\epsilon_n.
+\]
+This is a finite discrete-step path theorem, not a terminal-state comparison. It remains distinct from the manuscript's continuous-time event-path theorem; simply rounding continuous event times would not justify applying it to that law.
+
+For posterior thinning, Lean also proves that the finite acceptance probability
+$\sum_sp_s\lambda_s/c$ lies in $[0,1]$ when $0\le\lambda_s\le c$ and $c>0$, and that multiplying by $c$ gives $\sum_sp_s\lambda_s$. The marked-Poisson compensator argument in \Cref{prop:posterior-thinning} supplies the continuous-time interpretation.
+
+\subsection{Geometry, risk, and pricing declarations}
+The finite cell-integration theorem bounds the sum of absolute cell-rate errors by the weighted absolute field error. A second theorem proves the weighted Cauchy--Schwarz estimate
+\[
+ \sum_iw_i|d_i|
+ \le\sqrt{\sum_iw_i}\sqrt{\sum_iw_id_i^2},
+ \qquad w_i\ge0,
+\]
+including zero weights. Thus the finite quadrature constant is the square root of reference mass, rather than automatically the square root of coordinate count.
+
+The execution module proves a discrete price-quantile prefix inequality, the uniform policy comparison against every comparator, and the finite-law CVaR auxiliary-objective error before the infimum over its threshold. The pricing module proves the positivity of the finite normalizer in \Cref{prop:finite-martingale}, positivity of all normalized returns, their exact mean-one identity, and preservation of the conditional stock mean. No sampled approximation to a normalizing expectation is used in these formal statements.
+
+The refinement module checks the same real-valued radius recursion used in \Cref{thm:posterior-certificate}. It proves the nonlinear comparison, the linear majorant, the exponential bound, and the exact context-independent identity. Its input is the squared one-step discrepancy inequality; the probabilistic construction establishing that input is outside the Lean module.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}p{.29\textwidth}X@{}}
+\toprule
+Mathematical component & Checked scope\\
+\midrule
+Reserve accounting & Executable natural-number transition, rejection, and finite replay conservation.\\
+Path laws and sampling & Normalized history/mark composition, conditional TV bound, full finite-history error accumulation, and posterior acceptance identity.\\
+Field-to-rate geometry & Finite cell aggregation and weighted $L^1$--$L^2$ inequality.\\
+Posterior refinement & Real-sequence comparison and finite exponential certificate.\\
+Execution and risk & Finite-law bounded payoff and event inequalities; finite CVaR auxiliary objective; universal value-function regret comparison.\\
+Static liquidity & Discrete quantile-prefix bound; no formal identification with $W_1$.\\
+Pricing & Finite categorical mean normalization and one-step mean preservation.\\
+Decision certification & Rate-box endpoint inequalities, comparator-specific regret, finite probabilistic Bellman sandwich, and accumulated residual bound.\\
+\bottomrule
+\end{tabularx}
+\caption{Formal coverage of the finance project. The continuous-time and infinite-dimensional results remain analytic proofs in the manuscript.}
+\end{table}
+
+\subsection{Finite probabilistic control and numerical residuals}
+The certified-control module proves sign-dependent rate-box endpoint bounds and the comparator-specific inequality \eqref{eq:pessimistic-oracle}. It also defines an actual finite-horizon policy value recursively from normalized transition laws and costs. Expectation monotonicity proves that a Bellman subsolution for every action bounds every policy from below, while a supersolution for a selected action bounds that deployed policy from above. A separate theorem proves that local Bellman residuals accumulate by their sum, using the sup-norm nonexpansiveness of probability-weighted expectation. These are universal finite-probability statements, not arithmetic checks of one experimental table.
+
+The relation to \Cref{thm:robust-policy,prop:control-residual} is an explicit discrete-time analogue. Continuous-time HJB comparison, the Dynkin identity, counting-process supermartingales, simultaneous rate confidence, and bicausal stopping-time transfer remain manuscript proofs. The encoded finite transition law is normalized by construction; the formal statements do not silently assume that an arbitrary unnormalized numerical matrix is a probability kernel.
+
+\subsection{The analytic boundary and independent reproduction}
+The project does not formalize the compensator identity, construction of common Poisson random measures, maximal path coupling, disintegration, measurable selection of optimal transport plans, the Hilbert-valued infinite limit, the full CVaR infimum theorem, or the Gaussian martingale and adapted volatility-to-price estimates. The manuscript supplies those proofs under explicit hypotheses. None is inserted into the Lean project as an unproved axiom.
+
+\begin{samepage}
+From the supplied \texttt{lean/} directory, the standard commands are
+\begin{verbatim}
+lake exe cache get
+lake build
+lake env lean Audit.lean
+\end{verbatim}
+\end{samepage}
+The package includes the exact dependency manifest, a declaration-level coverage map, build and axiom-audit logs, and a verification script recording source hashes.
+No proof uses an admission or a custom mathematical axiom. The axiom audit identifies only the standard logical foundations needed by the declarations. A small executable-location compatibility adjustment used in the build environment is documented separately; it does not modify the proof kernel.
+
+Formal validity of the encoded mathematics does not establish historical calibration, latent-inventory identifiability, correctness of a production matching engine, or the prerequisites for counterfactual policy evaluation. Those are separate scientific and engineering claims.
+
+\section{Discussion and further research}\label{sec:discussion}
+The central connection is between a law on latent fields and the law of observable events. Integrating intensities gives a norm with stable resolution constants; conditional transport controls latent uncertainty; common-event coupling handles discontinuous market transitions; and total variation controls bounded execution and risk functionals. Each component addresses a different failure mode.
+
+Several conditions determine whether this theory can become a useful learned financial model. First, the event representation must reconstruct the state needed by the transition rule. A displayed-depth snapshot, an order-level queue, and a trade-and-quote stream contain different information. Latent variables can summarize missing information, but their physical interpretation remains conditional on the structural model. Second, the learned belief must remain accurate along the histories encountered in use. A local posterior approximation does not prove stability of a nonlinear filter through a long sequence of observations.
+
+Third, the intensity sensitivity can be the limiting factor. A highly accurate field reconstruction may be insufficient if a hidden decoder turns small coordinate changes into large changes in feasible event rates. In such cases one should compare the observable conditional rate vectors directly, use a latent metric matched to their predictive equivalence, or retain a discrete latent state with a suitable probability metric. The Hilbert formulation is a design option with explicit assumptions, not a universal coordinate system for integer market state.
+
+Fourth, policy evaluation requires intervention-aware dynamics. \Cref{thm:rate-confidence,thm:robust-policy} give a complete event-data certificate in an observable finite-state model with predictable behavior actions and sufficient exposure. They do not supply latent exposures or correct an omitted state variable. The uniform bound in \Cref{thm:regret} describes what must be established for a policy class; it does not establish that condition from passive records. A strong empirical study would therefore compare a displayed-only predictor, a point-estimate latent predictor, and a posterior-aware model under the same observation and action regime. It would report likelihood, event-validity rates, conditional fill and depletion probabilities, execution-cost calibration, and stress behavior, with uncertainty intervals and chronological evaluation splits.
+
+For pricing, an adapted positive martingale offers exact financial structure but does not determine the economically appropriate pricing measure. Calibration to option quotes and dynamic consistency of additional traded instruments remain separate tasks. The volatility-to-price estimate identifies a coupling error that can be meaningful for a sequential generative model, while showing why arbitrary future-path transport is insufficient.
+
+The stopping-time comparison additionally requires preservation of the observed information structure. The equal-terminal-law example shows that terminal calibration can coexist with an exercise-value discrepancy.
+
+Open problems include rate confidence regions for partially observed histories, stability of learned posterior approximations, joint rather than rectangular rate uncertainty, sharper decision-specific bounds, and empirically justified counterfactual dynamics. The finite observable experiment provides a benchmark where these components can be separated; applying the full latent-field theory to exchange records requires additional identification and calibration evidence.

@@ -1,0 +1,74 @@
+\subsection{Exact posterior randomization at thinning proposals}\label{sec:posterior-thinning}
+There is a direct implementation of the averaged intensity that does not hold a sampled latent rate during a waiting interval. It uses fresh randomness at every proposal, including proposals that are rejected.
+
+\begin{proposition}[Posterior-randomized thinning]\label{prop:posterior-thinning}
+For each mark $e$, let $c_e>0$ be a deterministic bound for
+$\widehat\lambda_e(t,h,z,a)$ on every required time, history, action, and latent state. Generate independent Poisson proposals of rate $c_e$. At a proposal time $t$, evaluate the history-dependent kernel $\widehat\pi_{t-}(h)$, draw a fresh $Z\sim\widehat\pi_{t-}(h)$ and independent $V\sim\mathrm{Unif}(0,1)$, and accept $e$ when
+\begin{equation}\label{eq:posterior-thinning}
+ V\le\widehat\lambda_e(t,h,Z,a)/c_e.
+\end{equation}
+The accepted process has observable intensity
+$\int\widehat\lambda_e(t,h,z,a)\widehat\pi_{t-}(h,\dd z)$.
+The same conclusion holds with one proposal stream of rate $c$ whenever
+$\sum_e\widehat\lambda_e\le c$, by selecting mark $e$ with probability
+$\widehat\lambda_e/c$ and rejecting the remaining probability.
+\end{proposition}
+\begin{proof}
+Regard each proposal as carrying independent uniform marks that randomize the latent kernel and acceptance decision. Conditional on the observable past, its acceptance probability for $e$ is
+$\int\widehat\lambda_e(t,h,z,a)\widehat\pi_{t-}(h,\dd z)/c_e$.
+The marked-Poisson compensator formula multiplies this probability by the proposal rate $c_e$. Boundedness gives nonexplosion, and \Cref{ass:simulator} identifies the resulting law. The one-stream construction replaces the Bernoulli mark by a categorical mark with the displayed probabilities and the same compensator calculation.
+\end{proof}
+
+The kernel is evaluated at the current time even when no market event has occurred. In a finite hidden model with no unobserved transitions between observed jumps, the posterior weights evolve over a quiet interval of length $u$ as
+\begin{equation}\label{eq:survival-filter}
+ p_s(u)=\frac{p_s(0)e^{-\Lambda_su}}{\sum_vp_v(0)e^{-\Lambda_vu}},
+ \qquad\Lambda_s=\sum_e\lambda_e(s).
+\end{equation}
+After an observed mark, multiply by its conditional rate, apply its hidden-state transition, and normalize. Rejected proposals are internal simulation events and are not added to the observed history. For hidden transitions between events, the exponential in \eqref{eq:survival-filter} is replaced by the appropriate killed transition semigroup.
+
+One exact posterior draw per proposal suffices: it introduces no Monte Carlo rate bias. An approximate posterior or an approximate acceptance rate still incurs the corresponding errors in \Cref{thm:main}. Holding a single draw through an exponential waiting time instead gives a different construction unless a coherent latent model and its filter are maintained. For rates $1$ and $4$ with equal prior weights, the correct latent-mixture survival at time one is
+$\tfrac12(e^{-1}+e^{-4})=0.193097540$.
+The changing posterior in \eqref{eq:survival-filter} reproduces it; freezing the averaged rate at $2.5$ gives $e^{-2.5}=0.082084999$.
+
+\subsection{The likelihood route and when it is preferable}\label{sec:kl}
+Under absolute continuity, the standard point-process likelihood offers a second comparison \citep{bremaud1981}. Assume the same initial law, common event representation, bounded predictable rates, and that the likelihood ratio is valid and integrable. In particular, a strictly positive learned rate on every feasible mark with positive true rate is a convenient sufficient support condition. Then
+\begin{equation}\label{eq:path-kl}
+ D_{\rm KL}(\mathbb P^a\|\widehat{\mathbb P}^a)
+ =\E^a\int_0^T\sum_e\left[
+ \bar\lambda_e\log\frac{\bar\lambda_e}{\widehat{\bar\lambda}_e}
+ -\bar\lambda_e+\widehat{\bar\lambda}_e\right]\dd t.
+\end{equation}
+The convention is $0\log(0/q)=0$; a positive true rate against a zero learned rate yields an infinite contribution. Taking the logarithm of the likelihood ratio and replacing each expected counting integral by its compensator proves \eqref{eq:path-kl}. Pinsker's inequality gives the additional bound
+\begin{equation}\label{eq:pinsker}
+ \TV(\mathbb P^a,\widehat{\mathbb P}^a)
+ \le\min\{1,\sqrt{D_{\rm KL}(\mathbb P^a\|\widehat{\mathbb P}^a)/2}\}.
+\end{equation}
+These are classical likelihood inequalities, not additional novelty claims.
+
+If $\widehat\lambda=(1+\theta)\lambda$ on a set of marks, its KL integrand equals
+$\lambda[\theta-\log(1+\theta)]
+=\lambda\theta^2/2+O(\lambda|\theta|^3)$.
+Thus the KL bound scales as $|\theta|\sqrt{\E\int\lambda}/2$ to first order, whereas the common-event $L^1$ bound scales as $|\theta|\E\int\lambda$. Neither dominates universally. The $L^1$ route handles support mismatch and separates field, posterior, and implementation errors without a denominator containing a small rate. When both apply, use the smaller certificate. A terminal-state TV measurement is not a full-path TV measurement and should not be used to declare either path bound sharp.
+
+\subsection{A mean posterior bound from a coupled latent model}\label{sec:posterior-stability}
+The following finite-state observation is useful when the learned filter is derived from a complete simulator, as in \Cref{sec:complete-model}.
+
+\begin{proposition}[Posterior stability in expectation]\label{prop:filter-stability}
+Let $P,Q$ be joint laws of observed history $Y$ and a finite hidden state $S$. Let $p(\cdot\mid Y),q(\cdot\mid Y)$ be posterior versions, with $q$ defined on all required $P_Y$ histories. Then
+\begin{equation}\label{eq:mean-posterior-tv}
+ \E_{P_Y}\TV(p(\cdot\mid Y),q(\cdot\mid Y))\le2\TV(P,Q).
+\end{equation}
+For a common finite hidden-state model with equal initial law, the same marked transition maps, and total outgoing rate discrepancy bounded by $\epsilon_\lambda$, common-event coupling gives
+$\TV(P_t,Q_t)\le1-e^{-\epsilon_\lambda t}$ for the joint history and current hidden state. If the hidden-state metric has diameter $D$, then
+\begin{equation}\label{eq:mean-posterior-wone}
+ \E_P W_1(\pi_{t-},\widehat\pi_{t-})
+ \le2D(1-e^{-\epsilon_\lambda t}).
+\end{equation}
+\end{proposition}
+\begin{proof}
+Use a common dominating measure for the observed-history marginals, with densities $a,b$. The triangle inequality gives
+$\sum_s|a p_s-a q_s|\le\sum_s|a p_s-b q_s|+|a-b|$.
+Integrate and divide by two. The resulting terms are $\TV(P,Q)$ and $\TV(P_Y,Q_Y)$, and marginalization contracts TV. For the dynamic statement couple equal full initial states and use common-event thinning; prior to disagreement the full histories and transitions agree. Finally a maximal coupling on the finite state set gives $W_1\le D\TV$, proving \eqref{eq:mean-posterior-wone}.
+\end{proof}
+
+This is an average over true histories, exactly the type of quantity used by \Cref{thm:main}. It is not a uniform pathwise filter bound: rare observed histories can have much larger posterior discrepancies. The $W_1$ form of \Cref{lem:posterior} is preferable here to replacing $W_1$ by $W_2$ and introducing a square-root loss for small finite-state errors.
